@@ -817,13 +817,11 @@ def slide_08_two_layers(prs):
         add_multiline_textbox(slide, x + SP_LG, item_y,
                               card_w - SP_LG * 2, Inches(1.90), lines)
 
-    # 중앙 양방향 화살표
-    arrow = add_textbox(slide, Inches(4.60), Inches(2.60), Inches(0.40), Inches(0.50),
-                        text="⟷", font_size=24, bold=True,
-                        color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, Inches(4.50), Inches(3.05), Inches(0.60), Inches(0.22),
-                text="상호보완", font_size=9, bold=True,
-                color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+    # 중앙 양방향 화살표 — 카드 아래 중앙에 배치
+    arrow_y = card_y + card_h + SP_XXS  # 카드 바로 아래
+    arrow_box = add_rect(slide, Inches(4.20), arrow_y, Inches(1.20), Inches(0.30),
+                         fill_color=C_DARK_BG, border_color=C_DARK_BG)
+    add_text_to_shape(arrow_box, "⟷ 상호보완", font_size=11, bold=True, color=C_TEXT_WHITE)
 
     add_insight_line(slide, "CAIO의 Top-down 구축과 각 부서의 Bottom-up 활용이 함께 이루어져야 하는 구조")
 
@@ -1066,60 +1064,63 @@ def slide_12_roadmap_overview(prs):
          "l2": "AI가 일상 업무 방식으로 정착\n자생적 운영"},
     ]
 
+    # content_width 내 3등분 계산
+    col_w = Inches(2.60)
+    total_3col = col_w * 3 + col_gap * 2  # 8.00"
+    col_start = MARGIN_LEFT + (CONTENT_W - total_3col) / 2  # 중앙 정렬
+
     header_y = ZONE_CONTENT_Y
-    header_h = Inches(0.55)
-    l1_y = Inches(2.30)
-    l2_y = Inches(3.50)
-    block_h = Inches(1.10)
+    header_h = Inches(0.40)
+    l1_y = Inches(2.18)
+    l2_y = Inches(3.25)
+    block_h = Inches(0.95)
 
     for i, stage in enumerate(stages):
-        x = MARGIN_LEFT + i * (col_w + col_gap)
+        x = col_start + i * (col_w + col_gap)
 
-        # 헤더
+        # 헤더 — 단일 텍스트로 통합
         hdr = add_rect(slide, x, header_y, col_w, header_h,
                        fill_color=C_DARK_BG, border_color=C_DARK_BG)
-        add_multiline_textbox(
-            slide, x, header_y, Inches(1.56), header_h,
-            [
-                {"text": stage["label"], "font_size": 10, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.CENTER},
-                {"text": stage["period"], "font_size": 10, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.CENTER},
-            ]
-        )
-        add_textbox(slide, x + Inches(1.43), header_y, Inches(1.17), header_h,
-                    text=stage["keyword"], font_size=9, color=C_SUB_DARK, align=PP_ALIGN.CENTER)
+        add_text_to_shape(hdr, f"{stage['label']} | {stage['period']} — {stage['keyword']}",
+                          font_size=10, bold=True, color=C_TEXT_WHITE)
 
-        # L1 블록
-        l1_box = add_rect(slide, x, l1_y, col_w, block_h,
+        # L1 블록 — 라벨을 별도 다크 배지로, 콘텐츠와 분리
+        l1_badge = add_rect(slide, x, l1_y, Inches(0.55), Inches(0.20),
+                            fill_color=C_DARK_BG, border_color=C_DARK_BG)
+        add_text_to_shape(l1_badge, "L1", font_size=8, bold=True, color=C_TEXT_WHITE)
+
+        l1_box = add_rect(slide, x, l1_y + Inches(0.22), col_w, block_h - Inches(0.22),
                           fill_color=C_BOX_BG, border_color=C_DARK_BG)
-        add_textbox(slide, x + SP_SM, l1_y + Inches(0.05), Inches(0.80), Inches(0.20),
-                    text="Layer 1", font_size=8, bold=True, color=C_TEXT_BLACK)
         add_multiline_textbox(
-            slide, x + SP_SM, l1_y + Inches(0.22), col_w - SP_SM * 2, Inches(0.75),
-            [{"text": line, "font_size": 11, "bold": False, "color": C_TEXT_BLACK,
+            slide, x + SP_SM, l1_y + Inches(0.26), col_w - SP_SM * 2, Inches(0.60),
+            [{"text": line, "font_size": 10, "bold": False, "color": C_TEXT_BLACK,
               "align": PP_ALIGN.LEFT} for line in stage["l1"].split("\n")]
         )
 
         # L2 블록
-        l2_box = add_rect(slide, x, l2_y, col_w, block_h,
+        l2_badge = add_rect(slide, x, l2_y, Inches(0.55), Inches(0.20),
+                            fill_color=C_DARK_BG, border_color=C_DARK_BG)
+        add_text_to_shape(l2_badge, "L2", font_size=8, bold=True, color=C_TEXT_WHITE)
+
+        l2_box = add_rect(slide, x, l2_y + Inches(0.22), col_w, block_h - Inches(0.22),
                           fill_color=C_BOX_BG, border_color=C_DARK_BG)
-        add_textbox(slide, x + SP_SM, l2_y + Inches(0.05), Inches(0.80), Inches(0.20),
-                    text="Layer 2", font_size=8, bold=True, color=C_TEXT_BLACK)
         add_multiline_textbox(
-            slide, x + SP_SM, l2_y + Inches(0.22), col_w - SP_SM * 2, Inches(0.75),
-            [{"text": line, "font_size": 11, "bold": False, "color": C_TEXT_BLACK,
+            slide, x + SP_SM, l2_y + Inches(0.26), col_w - SP_SM * 2, Inches(0.60),
+            [{"text": line, "font_size": 10, "bold": False, "color": C_TEXT_BLACK,
               "align": PP_ALIGN.LEFT} for line in stage["l2"].split("\n")]
         )
 
-        # 화살표 (1→2, 2→3)
+        # 화살표 (1→2, 2→3) — 간격 중앙
         if i < 2:
-            arrow_x = x + col_w + Inches(0.00)
-            add_textbox(slide, arrow_x, Inches(2.55), Inches(0.25), Inches(0.50),
-                        text="→", font_size=18, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+            arrow_x = x + col_w
+            add_textbox(slide, arrow_x, Inches(2.50), col_gap, Inches(0.30),
+                        text="→", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
-    # L2→L1 편입 라벨
-    add_textbox(slide, Inches(3.65), Inches(3.43), Inches(2.40), Inches(0.18),
+    # L2→L1 편입 라벨 — 2단계 열 중앙
+    mid_x = col_start + (col_w + col_gap)
+    add_textbox(slide, mid_x, l2_y - Inches(0.12), col_w, Inches(0.14),
                 text="▲ L2 성과 → L1 편입", font_size=8, bold=True,
-                color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
+                color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
     add_insight_line(slide, "오늘 승인 시 Layer 1은 내일부터 착수, Layer 2 제도는 즉시 시행")
 
@@ -1219,52 +1220,44 @@ def slide_14_candidate_map(prs):
         },
     ]
 
-    stage_h = Inches(0.70)
-    stage_gap = Inches(0.15)
+    stage_h = Inches(0.55)
+    stage_gap = Inches(0.10)
     sy = ZONE_CONTENT_Y
 
     for si, stage in enumerate(funnel_stages):
         # 중앙 정렬
         sx = MARGIN_LEFT + (CONTENT_W - stage["width"]) / 2
-        tc = C_TEXT_WHITE if si == 2 else C_TEXT_BLACK
 
         box = add_rect(slide, sx, sy, stage["width"], stage_h,
                        fill_color=stage["fill"], border_color=C_DARK_BG)
 
         if si == 0:
-            # 1단: 8개 항목을 한 줄로
             add_text_to_shape(box, " | ".join(stage["items"]),
-                              font_size=10, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+                              font_size=9, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
         elif si == 1:
-            # 2단: 탈락 항목 + 사유
             items_text = "  |  ".join([f"{n} ({r})" for n, r in stage["items"]])
             add_text_to_shape(box, items_text,
-                              font_size=9, color=C_CAPTION, align=PP_ALIGN.CENTER)
+                              font_size=8, color=C_CAPTION, align=PP_ALIGN.CENTER)
         else:
-            # 3단: 선정 항목 Bold
             add_text_to_shape(box, "  |  ".join(stage["items"]),
                               font_size=13, bold=True, color=C_TEXT_WHITE, align=PP_ALIGN.CENTER)
-
-        # 단계 라벨 (좌측)
-        add_textbox(slide, MARGIN_LEFT, sy, Inches(1.50), stage_h,
-                    text=stage["label"], font_size=10, bold=True,
-                    color=C_TEXT_BLACK if si < 2 else C_TEXT_WHITE)
 
         # 화살표 (단계 사이)
         if si < 2:
             add_textbox(slide, MARGIN_LEFT + CONTENT_W / 2 - Inches(0.15),
                         sy + stage_h, Inches(0.30), stage_gap,
-                        text="▼", font_size=12, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+                        text="▼", font_size=10, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
         sy += stage_h + stage_gap
 
-    # ── 선정 기준 4개 (하단 가로 배치) ──
+    # ── 선정 기준 4개 (하단 가로 배치) — 퍼널 아래에 충분한 간격 ──
+    crit_label_y = sy + SP_SM
     criteria = ["비용 절감 가시성", "독립 구축 가능성", "경영진 체감도", "후속 확장 기반"]
-    crit_y = Inches(3.80)
     crit_w = Inches(2.05)
-    crit_h = Inches(0.42)
+    crit_h = Inches(0.38)
+    crit_y = crit_label_y + Inches(0.28)
 
-    add_textbox(slide, MARGIN_LEFT, crit_y - Inches(0.28), CONTENT_W, Inches(0.25),
+    add_textbox(slide, MARGIN_LEFT, crit_label_y, CONTENT_W, Inches(0.25),
                 text="선정 기준", font_size=12, bold=True,
                 color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK)
 
@@ -1613,26 +1606,31 @@ def slide_21_policy2(prs):
 
     # 피라미드 3단
     levels = [
-        {"text": "조직장 KPI\n인당 생산성 향상 목표 의무 → 미달 시 고과 상위 등급 제한",
-         "w": Inches(5.00), "fill": C_DARK_BG, "tc": C_TEXT_WHITE},
-        {"text": "조직 KPI\n미달 조직 → 조직 효율화 검토",
-         "w": Inches(6.50), "fill": C_BOX_BG, "tc": C_TEXT_BLACK},
-        {"text": "인센티브\n최대 개선 부서 → 인센티브 지급",
-         "w": Inches(8.00), "fill": C_BOX_BG, "tc": C_TEXT_BLACK},
+        {"text": "조직장 KPI — 인당 생산성 향상 목표 의무, 미달 시 고과 상위 등급 제한",
+         "w": Inches(5.50), "fill": C_DARK_BG, "tc": C_TEXT_WHITE},
+        {"text": "조직 KPI — 미달 조직 → 조직 효율화 검토",
+         "w": Inches(7.00), "fill": C_BOX_BG, "tc": C_TEXT_BLACK},
+        {"text": "인센티브 — 최대 개선 부서 → 인센티브 지급",
+         "w": Inches(8.40), "fill": C_BOX_BG, "tc": C_TEXT_BLACK},
     ]
 
     py = Inches(1.80)
-    level_h = Inches(0.65)
+    level_h = Inches(0.50)
+    level_gap = SP_XS
     for lvl in levels:
         lx = MARGIN_LEFT + (CONTENT_W - lvl["w"]) / 2
         box = add_rect(slide, lx, py, lvl["w"], level_h,
                        fill_color=lvl["fill"], border_color=C_DARK_BG)
         add_text_to_shape(box, lvl["text"], font_size=11, bold=True, color=lvl["tc"])
-        py += level_h + SP_SM
+        py += level_h + level_gap
 
-    add_textbox(slide, Inches(5.50), Inches(3.85), Inches(4.00), Inches(0.25),
-                text='설계 원리: "안 해도 되는 것" → "하지 않으면 불이익"',
-                font_size=11, bold=True, color=C_TEXT_BLACK)
+    # 설계 원리 — 피라미드 아래에 충분한 간격
+    principle_y = py + SP_LG
+    principle_box = add_rect(slide, MARGIN_LEFT, principle_y, CONTENT_W, Inches(0.35),
+                             fill_color=C_BOX_BG, border_color=C_DARK_BG)
+    add_text_to_shape(principle_box,
+        '설계 원리: "안 해도 되는 것" → "하지 않으면 불이익"',
+        font_size=12, bold=True, color=C_TEXT_BLACK)
 
     add_insight_line(slide, "AI 활용이 선택이 아닌 필수")
 
