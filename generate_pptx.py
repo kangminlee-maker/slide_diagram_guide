@@ -497,7 +497,7 @@ def slide_05_disruption(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "우리가 기존 업계에 했던 것을, 누군가가 우리에게 하려 하고 있다")
+    add_white_title(slide, "우리가 성장한 방식으로 추월 당할 수 있다는 위기감")
 
     # 중앙 타임라인
     line_y = Inches(2.75)
