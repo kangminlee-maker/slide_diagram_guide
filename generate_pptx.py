@@ -1348,10 +1348,10 @@ def slide_14_candidate_map(prs):
             "width": Inches(7.00),
             "fill": C_BOX_BG,
             "items": [
-                ("변동비", "선행 필요"),
-                ("손익 보고", "선행 필요"),
-                ("수강 현황", "운영"),
-                ("B2B/B2G", "매출"),
+                ("변동비", "선행"),
+                ("손익", "선행"),
+                ("수강", "운영"),
+                ("B2B", "매출"),
                 ("ERP", "인프라"),
             ],
         },
@@ -1505,10 +1505,10 @@ def slide_16_revenue_problem(prs):
                 text="상품유형별 매출 인식 방식 — 6가지가 모두 다름", font_size=12, bold=True, color=C_TEXT_BLACK)
 
     types = ["단건 수강권", "구독형", "B2B 계약", "환불/부분취소", "번들 상품", "제휴/입점"]
-    type_w = Inches(1.40)
-    type_h = Inches(0.38)
-    type_gap = Inches(0.08)
     type_x = Inches(5.30)
+    type_gap = Inches(0.08)
+    type_w = (Inches(9.30) - type_x - 2 * type_gap) / 3  # 3열이 9.30" 내에 수용
+    type_h = Inches(0.38)
     type_y = Inches(2.82)
 
     for ti, t in enumerate(types):
