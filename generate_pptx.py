@@ -269,7 +269,7 @@ def slide_02_global_cases(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환했다")
+    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환")
 
     companies = [
         {"name": "Klarna",   "industry": "핀테크",   "metric": "-47%",    "detail": "5,527→2,907명", "result": "인당 매출 73%↑"},
@@ -360,7 +360,7 @@ def slide_03_new_normal(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "채용과 운영의 New Normal: 사람을 늘리지 않고 AI로 처리한다")
+    add_white_title(slide, "채용과 운영의 New Normal: 사람을 늘리지 않고 AI로 처리")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -569,7 +569,7 @@ def slide_06_current_state(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "매출이 성장하면 인건비도 비례하여 증가하는 구조에 놓여 있다")
+    add_white_title(slide, "매출이 성장하면 인건비도 비례하여 증가하는 구조")
 
     # 좌측: 월간 반복 업무 시간
     left_x = MARGIN_LEFT
@@ -747,7 +747,7 @@ def slide_08_two_layers(prs):
     """슬라이드 8: AI 전환의 두 가지 Layer (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "전사 AI 전환은 성격이 다른 두 Layer로 구성된다")
+    add_white_title(slide, "전사 AI 전환은 성격이 다른 두 Layer로 구성")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -812,7 +812,7 @@ def slide_09_synergy(prs):
     """슬라이드 9: 두 Layer의 상호보완 구조 (화이트, 3단 번호 목록)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감이 완성된다")
+    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 완성")
 
     sections = [
         {
@@ -898,7 +898,7 @@ def slide_10_palantir(prs):
     """슬라이드 10: Layer 1 참고 사례 (화이트, 4열 카드)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 1의 데이터 구조화 + 자동화 방식은 글로벌 기업에서 검증되었다")
+    add_white_title(slide, "Layer 1의 데이터 구조화 + 자동화 방식은 글로벌 기업에서 검증")
 
     n = 4
     card_w = PRESETS[n]["w"]
@@ -965,7 +965,7 @@ def slide_11_l2_cases(prs):
     """슬라이드 11: Layer 2 참고 사례 (화이트, 4열 카드 + 하단 매핑)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 2의 핵심은 기술이 아니라 제도다 — 이 기업들은 제도를 먼저 설계했다")
+    add_white_title(slide, "Layer 2의 핵심은 기술이 아니라 제도 — 이 기업들은 제도를 먼저 설계")
 
     n = 4
     card_w = PRESETS[n]["w"]
@@ -1111,7 +1111,7 @@ def slide_13_tech_approach(prs):
     """슬라이드 13: Layer 1의 기술 접근 (화이트, 상하 2단 구조도)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "검증된 아키텍처 위에 빠르게 구축하고, 결과를 바로 확인한다")
+    add_white_title(slide, "검증된 아키텍처 위에 빠르게 구축, 결과를 바로 확인")
 
     # 상단: Palantir 5계층
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.25),
@@ -1166,7 +1166,7 @@ def slide_14_candidate_map(prs):
     """슬라이드 14: 전사 자동화 영역 전체 지도 + 후보 선별 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "8개 후보 중 실질 후보 3개를 선별했다")
+    add_white_title(slide, "8개 후보 중 실질 후보 3개 선별")
 
     # 탈락/선정 리스트
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.25),
@@ -1217,7 +1217,7 @@ def slide_15_comparison(prs):
     """슬라이드 15: 후보 비교표 + CAIO 권고 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "가장 빠르고 확실한 성과가 기대되는 영역이다")
+    add_white_title(slide, "가장 빠르고 확실한 성과가 기대되는 영역")
 
     # 표 데이터
     headers = ["기준", "A. 매출 정산", "C. 광고비 집계", "G. 인건비 정산"]
@@ -1266,7 +1266,7 @@ def slide_16_revenue_problem(prs):
     """슬라이드 16: 매출 정산 현재 문제 상세 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "매출 정산을 선택할 경우, 이것이 해결해야 할 구체적인 문제이다")
+    add_white_title(slide, "매출 정산을 선택할 경우, 이것이 해결해야 할 구체적인 문제")
 
     # 좌측: 프로세스 흐름
     steps = ["ERP 다운로드", "수작업 계산", "수작업 검증", "보고"]
@@ -1362,7 +1362,7 @@ def slide_18_success_metrics(prs):
     """슬라이드 18: 성공 지표 + 실패 모드 방어선 (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "가장 큰 위험은 기술 실패가 아니라 결과에 대한 불신이다")
+    add_white_title(slide, "가장 큰 위험은 기술 실패가 아니라 결과에 대한 불신")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -1424,7 +1424,7 @@ def slide_19_why_policy(prs):
     """슬라이드 19: 왜 제도가 필요한가 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질이다")
+    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질")
 
     obstacles = [
         {"num": "①", "problem": "유인 없음", "desc": "AI를 써도 평가에 반영되지 않으면 익숙한 방식 유지",
@@ -1593,7 +1593,7 @@ def slide_23_policy4(prs):
     """슬라이드 23: 제도 4 — AI 챔피언 제도 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "챔피언이 부서의 변화를 이끌고, Layer 1과의 연결점이 된다")
+    add_white_title(slide, "챔피언이 부서의 변화를 이끌고, Layer 1과의 연결점")
 
     # 중앙 허브
     hub = add_rect(slide, Inches(4.00), Inches(2.20), Inches(2.00), Inches(0.60),
@@ -1738,7 +1738,7 @@ def slide_26_caio_role(prs):
     """슬라이드 26: CAIO 역할 체계 (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "CAIO가 구조를 설계하고, 조직이 스스로 성장하게 한다")
+    add_white_title(slide, "CAIO가 구조를 설계하고, 조직이 스스로 성장하는 구조")
 
     # 좌측: 역할
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, Inches(4.00), Inches(0.25),
@@ -1932,7 +1932,7 @@ def slide_31_decision(prs):
     """슬라이드 31: 경영진 의사결정 요청 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "오늘 승인하시면, 내일부터 실행합니다")
+    add_white_title(slide, "오늘 승인 시, 내일부터 실행")
 
     n = 2
     card_w = PRESETS[n]["w"]
