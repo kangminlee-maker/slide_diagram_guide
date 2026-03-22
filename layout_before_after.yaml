@@ -1,0 +1,209 @@
+# diagram_layouts/before_after.yaml
+# Before/After 도식 레이아웃 정의
+# 참조 위치: slide_diagram_guide.yaml > message_types.comparison.before_after
+# DAY1COMPANY | ver 1.0
+
+meta:
+  purpose: >
+    Before/After 비교 도식의 6가지 레이아웃을 정의한다.
+    메인 지침(slide_diagram_guide.yaml)의 message_types.comparison.before_after에서
+    selection_guide를 통해 적절한 레이아웃을 선택한다.
+  color_ref: "slide_diagram_guide.yaml > design.colors"
+  common_node_rules:
+    text_align:
+      title: "상하좌우 가운데 정렬 (수직 중앙 + 수평 중앙)"
+      sentence: "상하 가운데 정렬 + 좌측 정렬"
+    node_types:
+      kept:    { bg: "#FFFFFF", text: "#1A1A1A", border: "#1A1A1A 0.5pt" }
+      removed: { bg: "#D9D9D9", text: "#1A1A1A", border: "#1A1A1A 0.5pt", decoration: "취소선" }
+      new_ai:  { bg: "#1A1A1A", text: "#FFFFFF", border: "#1A1A1A 0.5pt" }
+      empty:   { bg: "#D9D9D9", text: "-",       border: "#1A1A1A 0.5pt" }
+    connector: '`→` 텍스트, 14pt Bold, #1A1A1A'
+    forbidden:
+      - "✕ 아이콘 사용 → 취소선 텍스트로 대체"
+      - "Before/After 라벨에 회색 텍스트 → #1A1A1A Bold 사용"
+      - "3개 이상 박스를 가로 flow로 구성"
+
+# ────────────────────────────────────────────
+# 선택 기준 (사용 전 반드시 확인)
+# ────────────────────────────────────────────
+selection_guide:
+  decision_axis:
+    - question: "변경 항목이 1~2개이고 나머지는 유지되는가?"
+      answer_yes: "F (델타)"
+    - question: "전체 흐름 구조는 같고 일부 노드만 교체되는가? (단계 3~4개)"
+      answer_yes: "E (스택)"
+    - question: "역할/담당자 단위의 책임 이동이 변경의 핵심인가?"
+      answer_yes: "A (스윔레인)"
+    - question: "프로세스 자체가 재설계되어 단계 수나 흐름이 달라지는가?"
+      answer_yes: "C (갭)"
+    - question: "변화 요인(why)을 설명하는 것이 메시지의 핵심인가?"
+      answer_yes: "B (브리지)"
+    - question: "변경 항목이 5개 이상이고 항목별 상세 대응이 필요한가?"
+      answer_yes: "D (테이블)"
+
+  use_case_mapping:
+    ai_role_replacement:
+      description: "특정 역할이 AI로 교체되는 장면"
+      recommend: "E (스택) 또는 A (스윔레인)"
+      reason: "흐름은 유지되고 노드만 교체되므로 E가 기본. 역할 간 인계 관계가 핵심이면 A."
+    headcount_reduction:
+      description: "헤드카운트 감축 근거 제시"
+      recommend: "D (테이블)"
+      reason: "항목 수가 많고 역할별 Before/After를 상세하게 대응시켜야 설득력이 높음."
+    process_redesign:
+      description: "업무 프로세스 전면 재설계"
+      recommend: "C (갭)"
+      reason: "단계 수나 흐름 자체가 달라지므로 전체 구조 변화를 위아래로 보여주는 것이 명확."
+    single_change:
+      description: "한두 가지 변경점만 강조"
+      recommend: "F (델타)"
+      reason: "나머지는 배경 처리하고 변경 지점만 부각시켜 시선을 집중시킴."
+
+# ────────────────────────────────────────────
+# A. 스윔레인
+# ────────────────────────────────────────────
+layouts:
+  A_swimlane:
+    name: "스윔레인"
+    message_focus: "누가 무엇을 하는지가 바뀐다. 책임 이동이 핵심."
+    fit:
+      - "역할/담당자 3개 이상"
+      - "역할 간 인계 포인트가 변경의 핵심"
+    not_fit:
+      - "역할 구분이 없는 경우"
+      - "변경 항목이 1~2개뿐 (오버스펙)"
+    structure: |
+      수평 레인을 역할 수만큼 생성.
+      각 레인 안에서 Before 노드(좌) → After 노드(우) 배치.
+      레인 사이 수직 구분선으로 역할 분리.
+      Before/After 영역은 수직 점선으로 분리.
+    execution: |
+      - 레인 헤더: 역할명, 13pt Bold, #1A1A1A, 레인 좌측 배치
+      - 레인 배경: 홀수 레인 #D9D9D9 (10% 투명), 짝수 레인 흰색으로 교차
+      - Before/After 구분 레이블: 14pt Bold, #1A1A1A, 각 영역 상단 중앙
+      - 노드: common_node_rules.node_types 적용
+      - 노드 내 텍스트: common_node_rules.text_align 적용
+      - 레인 높이: 노드 높이 + 상하 패딩 0.15" 이상
+
+# ────────────────────────────────────────────
+# B. 브리지
+# ────────────────────────────────────────────
+  B_bridge:
+    name: "브리지"
+    message_focus: "무엇이 변화를 만들었는가. 변화 요인이 핵심."
+    fit:
+      - "변화 요인 2~5개"
+      - "Before→After의 수치 차이가 있을 때"
+    not_fit:
+      - "변화 요인이 1개뿐"
+      - "역할별 세부 내용을 보여줘야 할 때"
+    structure: |
+      [Before 박스] → [변화요인1] → [변화요인2] → ... → [After 박스]
+      Before/After는 전체 높이 박스. 변화 요인은 그 사이에 플로팅 박스.
+    execution: |
+      - Before/After 박스: #D9D9D9 배경, 14pt Bold, 상하좌우 가운데 정렬
+      - 변화 요인 박스:
+          제거 요인: #D9D9D9 배경 + 취소선
+          추가/AI 요인: #1A1A1A 배경, 흰 텍스트
+          중립 변화: 흰색 배경, 검정 텍스트
+      - 연결선: `→`, 14pt Bold
+      - 수치가 있을 경우 Before/After 박스 아래에 수치 표기 (14pt Bold)
+
+# ────────────────────────────────────────────
+# C. 갭
+# ────────────────────────────────────────────
+  C_gap:
+    name: "갭"
+    message_focus: "전체 흐름이 어떻게 달라지는가. 구조 전환이 핵심."
+    fit:
+      - "프로세스 자체가 재설계될 때"
+      - "Before와 After의 단계 수나 흐름 구조가 다를 때"
+    not_fit:
+      - "Before/After 단계가 동일한 경우"
+      - "변화 동인 설명이 불필요한 경우"
+    structure: |
+      [Before 전체 흐름 행]
+              ↓ 변화 동인 박스 (점선)
+      [After 전체 흐름 행]
+    execution: |
+      - Before 행: #D9D9D9 배경 전체 너비 박스, 내부에 노드 나열
+      - After 행: #1A1A1A 배경 전체 너비 박스, 흰 텍스트 노드
+      - 변화 동인 박스: 점선 테두리, 흰 배경, 중앙 배치
+      - 수직 화살표: Before → 동인 박스 → After
+      - 행 내 노드: `→` 연결, 노드 텍스트는 common_node_rules.text_align 적용
+
+# ────────────────────────────────────────────
+# D. 테이블 매핑
+# ────────────────────────────────────────────
+  D_table:
+    name: "테이블 매핑"
+    message_focus: "항목마다 정확히 무엇이 달라지는가. 상세 매핑이 핵심."
+    fit:
+      - "변경 항목 5개 이상"
+      - "항목별 Before/After 내용이 다를 때"
+    not_fit:
+      - "흐름/순서가 메시지의 핵심인 경우"
+      - "항목 수 4개 이하 (오버스펙)"
+    structure: |
+      | 항목 | Before | After |
+      |------|--------|-------|
+      | 역할 A | ... | ... |
+      | 역할 B | (취소선) | AI 대체 |
+    execution: |
+      - 헤더 행: #1A1A1A 배경, 흰 텍스트, 14pt Bold, 상하좌우 가운데 정렬
+      - 일반 행: 흰 배경 / 회색(#D9D9D9) 행 교차
+      - 제거 행 Before 셀: #D9D9D9 배경 + 취소선
+      - 신규/AI 행 After 셀: #1A1A1A 배경, 흰 텍스트
+      - 셀 내 텍스트: common_node_rules.text_align.sentence 적용 (완결 문장)
+      - 셀 패딩: 상하 0.1", 좌우 0.15"
+      - 열 너비 비율 권장: 항목 20% / Before 40% / After 40%
+
+# ────────────────────────────────────────────
+# E. 스택
+# ────────────────────────────────────────────
+  E_stack:
+    name: "스택"
+    message_focus: "전체 흐름은 같되 일부가 교체됐다. 교체 지점이 핵심."
+    fit:
+      - "단계 수 3~4개"
+      - "흐름 구조는 유지, 일부 노드만 교체"
+    not_fit:
+      - "단계 수 5개 이상 (가로 공간 부족)"
+      - "역할 정보가 중요한 경우"
+    structure: |
+      [Before 행: 노드A → 노드B → 노드C]
+               ↓ 변경 레이블
+      [After 행:  노드A → AI   → 노드C]
+    execution: |
+      - Before 행 배경: #D9D9D9, 행 레이블 "Before" 14pt Bold, #1A1A1A
+      - After 행 배경: 흰색, After 행 테두리 #1A1A1A 1pt, 행 레이블 "After"
+      - 변경 화살표: 수직 ↓, 변경 지점 중앙에만 배치
+      - 변경 레이블: 교체 내용 한 줄 요약, 12pt, #1A1A1A
+      - 노드: common_node_rules.node_types 적용
+      - 노드 내 텍스트: common_node_rules.text_align 적용
+
+# ────────────────────────────────────────────
+# F. 델타
+# ────────────────────────────────────────────
+  F_delta:
+    name: "델타(Δ)"
+    message_focus: "딱 이 부분이 바뀌었다. 변경 지점이 핵심."
+    fit:
+      - "변경 항목 1~2개"
+      - "나머지는 유지되고 변경점만 강조할 때"
+    not_fit:
+      - "변경 항목 3개 이상"
+      - "전체 구조 변화를 보여줘야 할 때"
+    structure: |
+      전체 흐름을 배경으로 배치 (낮은 대비).
+      변경 항목만 강조 박스로 부각.
+      [유지 노드(배경)] [제거→교체 강조박스] [유지 노드(배경)]
+    execution: |
+      - 유지 노드: #D9D9D9 배경, 40% 불투명도 (배경 처리)
+      - 강조 박스: #1A1A1A 테두리 1.5pt로 변경 영역 감싸기
+      - 강조 영역 내부:
+          제거 노드: #D9D9D9 배경 + 취소선
+          교체 노드: #1A1A1A 배경, 흰 텍스트
+      - Δ 레이블: "변경 지점" 또는 변경 내용 요약, 12pt Bold, #1A1A1A
+      - 강조 박스 하단에 Δ 레이블 배치

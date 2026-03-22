@@ -1,0 +1,106 @@
+# diagram_layouts/process.yaml
+# 프로세스(Process) 메시지 유형의 레이아웃 패턴 정의
+# 참조 위치: slide_diagram_guide.yaml > message_types.process
+# DAY1COMPANY | ver 1.0
+
+meta:
+  message_type: "process"
+  condition: "단계가 순서대로 진행되며, 이전 단계가 다음 단계에 영향을 준다."
+
+selection_guide:
+  decision_axis:
+    - question: "날짜 또는 기간이 메시지의 핵심인가?"
+      answer_yes: "C (타임라인) 또는 D (로드맵)"
+      detail: "날짜만 있으면 C. 단계+기간+담당을 동시에 표현해야 하면 D."
+    - question: "분기(Yes/No 조건)가 존재하는가?"
+      answer_yes: "B (분기 플로우차트)"
+    - question: "단계 수가 2~4개이고 가로로 표현할 수 있는가?"
+      answer_yes: "A (가로 흐름도)"
+    - question: "단계 수가 5개 이상인가?"
+      answer_yes: "E (세로/번호 목록)"
+  forbidden:
+    - "단계 수 5개 이상을 가로 흐름도로 표현 → 가독성 붕괴, E로 전환"
+    - "순서 없는 항목을 흐름도로 표현 → list 유형으로 재분류"
+
+layouts:
+  A_horizontal_flow:
+    name: "가로 흐름도"
+    when: "단계 2~4개. 순서가 핵심이고 가로 공간이 충분할 때."
+    not_when: "단계 5개 이상 / 분기가 있을 때"
+    structure: |
+      [단계1] → [단계2] → [단계3] → [단계4]
+    execution:
+      node: |
+        - 도형: 사각형 박스, 높이 0.5"
+        - 폭: 슬라이드 폭을 단계 수로 균등 분배 (간격 0.15" 확보)
+        - 일반 노드: 흰색 배경, #1A1A1A 텍스트, #1A1A1A 테두리 0.5pt
+        - 보조 노드: #D9D9D9 배경, #1A1A1A 텍스트
+        - 최종/강조 노드: #1A1A1A 배경, #FFFFFF 텍스트
+        - 텍스트: 제목이면 상하좌우 가운데 / 문장이면 상하 가운데 + 좌측
+      connector: '`→` 텍스트, 14pt Bold, #1A1A1A'
+      label: "단계 번호(선택): 노드 상단 좌측, 11pt Bold"
+
+  B_branch_flowchart:
+    name: "분기 플로우차트"
+    when: "Yes/No 또는 조건 분기가 1~2개 있을 때."
+    not_when: "분기 3개 이상 (슬라이드 분리) / 분기 없는 순차 흐름"
+    structure: |
+      [단계1] → ◇조건? → Yes → [단계2a]
+                        → No  → [단계2b]
+    execution: |
+      - 분기점: 마름모(◇) 도형
+      - Yes/No 또는 조건 레이블: 화살표 옆, 11pt, #1A1A1A
+      - 분기 후 합류점이 있으면 합류 노드 명시
+      - 한 슬라이드 분기점 최대 2개
+      - 노드 스타일: A_horizontal_flow와 동일
+
+  C_timeline:
+    name: "타임라인"
+    when: "날짜/기간이 메시지의 핵심일 때. 이벤트 시점을 강조할 때."
+    not_when: "날짜 없이 단순 단계 나열 / 단계 간 의존 관계가 핵심인 경우"
+    structure: |
+      |----●--------●--------●----|
+      날짜1      날짜2      날짜3
+      이벤트1   이벤트2   이벤트3
+    execution: |
+      - 수평 기준선: #1A1A1A, 1pt
+      - 마커: 원형(직경 0.1"), #1A1A1A 채움
+      - 날짜: 기준선 아래, 11pt, #1A1A1A
+      - 이벤트 설명: 기준선 위, 교차 배치(위-아래-위), 13pt, #1A1A1A
+      - 현재 시점: 수직 강조선 #1A1A1A 1.5pt
+      - 미래 항목: #D9D9D9 마커로 구분 가능
+
+  D_roadmap:
+    name: "로드맵"
+    when: "단계 + 기간 + 마일스톤을 동시에 표현해야 할 때."
+    not_when: "기간 정보가 없을 때 / 단계 수 2개 이하"
+    structure: |
+      기간축  |  1분기  |  2분기  |  3분기  |
+      단계 A  |██████  |         |         |
+      단계 B  |        |████████ |         |
+      단계 C  |        |    ●    |█████████|
+                             마일스톤
+    execution: |
+      - 기간 헤더 행: #1A1A1A 배경, #FFFFFF 텍스트, 13pt Bold
+      - 단계 레이블 열: 좌측, 13pt Bold, #1A1A1A
+      - 진행 바: #D9D9D9(일반) / #1A1A1A(강조 단계)
+      - 마일스톤: 다이아몬드(◆) 또는 원형(●), #1A1A1A
+      - 마일스톤 레이블: 12pt, #1A1A1A, 마커 아래 배치
+      - 행 높이: 0.4~0.5"
+      - 열 너비: 기간 수에 따라 균등 분배
+
+  E_vertical_numbered:
+    name: "세로/번호 목록"
+    when: "단계 5개 이상. 또는 각 단계 설명이 길어 가로 배치가 어려울 때."
+    not_when: "단계 4개 이하 (A 가로 흐름도 사용)"
+    structure: |
+      1. 단계명 — 설명
+      2. 단계명 — 설명
+      3. 단계명 — 설명
+      ...
+    execution: |
+      - 번호: 14pt Bold, #1A1A1A
+      - 단계명: 14pt Bold, #1A1A1A
+      - 설명: 13pt Regular, #1A1A1A, 단계명 아래 들여쓰기
+      - 단계 간 구분선(선택): #D9D9D9 수평선 0.5pt
+      - 현재/완료 단계 강조: 번호 원형 배경 #1A1A1A + #FFFFFF 텍스트

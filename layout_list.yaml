@@ -1,0 +1,79 @@
+# diagram_layouts/list.yaml
+# 목록(List) 메시지 유형의 레이아웃 패턴 정의
+# 참조 위치: slide_diagram_guide.yaml > message_types.list
+# DAY1COMPANY | ver 1.0
+
+meta:
+  message_type: "list"
+  condition: "항목들이 독립적으로 나열되며, 순서나 위계가 없다."
+
+selection_guide:
+  decision_axis:
+    - question: "항목이 2~3개이고, 각 항목에 제목+설명이 모두 있는가?"
+      answer_yes: "A (박스 그리드)"
+    - question: "항목이 4개 이상이거나, 각 항목이 키워드 수준으로 짧은가?"
+      answer_yes: "B (수직 목록)"
+    - question: "각 항목을 아이콘으로 직관적으로 표현할 수 있는가?"
+      answer_yes: "C (아이콘 + 텍스트 행)"
+    - question: "항목 간 중요도 차이가 없고 시각적 균형이 핵심인가?"
+      answer_yes: "A 또는 C"
+  forbidden:
+    - "항목 4개 이상을 박스 가로 나열 → B 또는 C로 전환"
+    - "순서가 있는 항목을 목록으로 표현 → process 유형으로 재분류"
+
+layouts:
+  A_box_grid:
+    name: "박스 그리드"
+    when: "항목 2~3개. 각 항목에 제목과 설명이 모두 있을 때."
+    not_when: "항목 4개 이상 / 항목이 키워드 수준으로 짧을 때"
+    structure: |
+      [박스1] [박스2] [박스3]
+      - 가로 균등 배치
+    execution:
+      two_box:
+        width_each: '4.0"'
+        gap: '0.2"'
+        start_y: '1.6~1.7"'
+      three_box:
+        width_each: '2.7"'
+        gap: '0.15"'
+        start_y: '1.6~1.7"'
+      style: |
+        - 기본 박스: #D9D9D9 배경, #1A1A1A 테두리 0.5pt, 패딩 0.25"
+        - 강조 박스 1개 허용: #1A1A1A 배경, #FFFFFF 텍스트
+        - 박스 제목: 13~15pt Bold, 상하좌우 가운데 정렬
+        - 박스 본문: 11~13pt Regular, 상하 가운데 + 좌측 정렬
+        - 높이: 내용에 따라 2.4~3.4"
+
+  B_vertical_list:
+    name: "수직 목록"
+    when: "항목 4개 이상. 또는 항목이 키워드~한 줄 수준으로 짧을 때."
+    not_when: "각 항목에 설명이 필요한 경우 → A 또는 C 검토"
+    structure: |
+      - 항목 1
+      - 항목 2
+      - 항목 3
+      ...
+    execution: |
+      - 번호 또는 대시(-)로 항목 구분
+      - 항목 텍스트: 14~15pt Regular, #1A1A1A
+      - 보조 설명: 들여쓰기, 11pt, #1A1A1A (회색 금지)
+      - 항목 간 간격: 0.1~0.15"
+      - 항목당 최대 1줄 원칙. 보조 설명은 다음 줄 들여쓰기.
+
+  C_icon_text_row:
+    name: "아이콘 + 텍스트 행"
+    when: "항목마다 아이콘으로 의미를 직관적으로 표현할 수 있을 때. 항목 3~6개."
+    not_when: "아이콘이 내용을 대표하지 못하는 경우 / 항목 설명이 3줄 이상"
+    structure: |
+      [아이콘] 항목 제목
+               보조 설명 텍스트
+      [아이콘] 항목 제목
+               보조 설명 텍스트
+    execution: |
+      - 아이콘: 원형 배경(#D9D9D9) 안에 배치, 직경 0.4~0.5"
+      - 아이콘과 텍스트 간격: 0.15"
+      - 항목 제목: 14~15pt Bold, #1A1A1A, 아이콘과 수직 중앙 정렬
+      - 보조 설명: 11~13pt Regular, #1A1A1A, 제목 아래 들여쓰기
+      - 행 간격: 0.2~0.3"
+      - 모든 아이콘은 동일한 스타일·크기 유지
