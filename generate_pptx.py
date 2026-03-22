@@ -974,7 +974,7 @@ def slide_08_two_layers(prs):
 
     layers = [
         {
-            "title": "Layer 1", "subtitle": "구조화 자동화 (온톨로지 기반)",
+            "title": "Layer 1", "subtitle": "구조화 자동화 — Palantir Approach",
             "items": [
                 ("예시", "매출 정산, 강사료 정산, 광고비 정산, 손익 보고"),
                 ("출력 성격", "결정적 — 같은 입력이면 항상 같은 결과"),
@@ -2210,7 +2210,7 @@ def slide_30_summary(prs):
     add_multiline_textbox(
         slide, MARGIN_LEFT, Inches(1.20), Inches(4.00), Inches(1.50),
         [
-            {"text": "Layer 1 — 구조화 자동화", "font_size": 14, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
+            {"text": "Layer 1 — 구조화 자동화 (Palantir Approach)", "font_size": 14, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
             {"text": "CAIO가 매출 정산 → 강사료 → 광고비", "font_size": 12, "bold": False, "color": C_SUB_DARK, "align": PP_ALIGN.LEFT},
             {"text": "2개월 내 완성", "font_size": 12, "bold": False, "color": C_SUB_DARK, "align": PP_ALIGN.LEFT},
             {"text": "이후 Layer 2와 함께 고도화", "font_size": 12, "bold": False, "color": C_SUB_DARK, "align": PP_ALIGN.LEFT},
@@ -2367,7 +2367,7 @@ def main():
 
     # ── 중간 제목: Part 3 (Layer 1 상세) ──
     add_section_title(prs,
-        "Layer 1 — 구조화 자동화, 첫 프로젝트와 실행",
+        "Layer 1 — Palantir Approach, 첫 프로젝트와 실행",
         "Part 3 — 무엇을, 언제까지, 어떻게")
 
     slide_13_tech_approach(prs)

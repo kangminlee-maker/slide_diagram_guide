@@ -427,12 +427,12 @@ design:
     canonical_terms:
       # 전략 구조
       layer_1:
-        canonical: "Layer 1 — 구조화 자동화"
+        canonical: "Layer 1 — 구조화 자동화 (Palantir Approach)"
         short: "L1"
-        definition: "CAIO가 Top-down으로 전사 데이터 구조를 설계하고, 반복 업무를 자동화하는 영역"
+        definition: "CAIO가 Top-down으로 전사 데이터 구조를 설계하고, 반복 업무를 자동화하는 영역. Palantir Foundry의 데이터 구조화 접근 방식을 채택"
         position: "전략의 기반층. Layer 2의 성과가 여기에 편입되어 시스템화됨"
         forbidden: ["레이어 1", "1단계 전략", "자동화 레이어"]
-        usage: "처음 등장 시 'Layer 1 (구조화 자동화)'로 풀네임, 이후 'Layer 1' 또는 'L1' 사용"
+        usage: "처음 등장 시 'Layer 1 — 구조화 자동화 (Palantir Approach)'로 풀네임, 이후 'Layer 1' 또는 'L1' 사용"
 
       layer_2:
         canonical: "Layer 2 — AI 도구 활용"
