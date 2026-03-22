@@ -1932,7 +1932,7 @@ def slide_31_decision(prs):
     """슬라이드 31: 경영진 의사결정 요청 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "오늘 승인 시, 내일부터 실행")
+    add_white_title(slide, "이후 실행 플랜")
 
     n = 2
     card_w = PRESETS[n]["w"]
