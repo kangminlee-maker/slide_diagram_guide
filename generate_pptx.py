@@ -70,7 +70,7 @@ FLOW_NODE_H = Inches(0.38)
 FLOW_ARROW_W = Inches(0.30)
 
 
-# ── 텍스트 폭 추정 함수 ────────────────────────
+# ── 텍스트 폭 추정 + 의미 단위 줄바꿈 함수 ────────
 def estimate_text_width(text, font_size_pt, bold=False):
     """텍스트가 차지할 예상 폭(인치)을 근사 계산.
     한글: 글자당 약 font_size * 0.017"
@@ -87,9 +87,57 @@ def estimate_text_width(text, font_size_pt, bold=False):
     return width
 
 
+def semantic_line_break(text, box_width_inches, font_size, bold=False):
+    """텍스트가 박스 폭을 초과하면, 의미 단위(어절/구두점)로 줄바꿈을 삽입.
+    줄바꿈 우선순위: 쉼표(,) > 마침표(.) > 공백 > 기호(→, +, —)
+    폰트 크기는 변경하지 않는다."""
+    if '\n' in text:
+        return text  # 이미 수동 줄바꿈이 있으면 그대로
+
+    est = estimate_text_width(text, font_size, bold)
+    if est <= box_width_inches:
+        return text  # 한 줄에 들어가면 그대로
+
+    # 줄바꿈 후보 위치 찾기 (우선순위 순)
+    # 텍스트를 중간 지점 근처에서 끊기
+    target_pos = len(text) // 2
+
+    # 1차: 쉼표 근처에서 끊기
+    best_pos = -1
+    best_dist = len(text)
+    for i, ch in enumerate(text):
+        if ch in ',，' and i > len(text) * 0.3 and i < len(text) * 0.8:
+            dist = abs(i - target_pos)
+            if dist < best_dist:
+                best_dist = dist
+                best_pos = i + 1
+
+    # 2차: 공백 근처에서 끊기
+    if best_pos == -1:
+        for i, ch in enumerate(text):
+            if ch == ' ' and i > len(text) * 0.3 and i < len(text) * 0.8:
+                dist = abs(i - target_pos)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_pos = i + 1
+
+    # 3차: 기호(→, +, —) 근처에서 끊기
+    if best_pos == -1:
+        for i, ch in enumerate(text):
+            if ch in '→+—' and i > len(text) * 0.25 and i < len(text) * 0.85:
+                dist = abs(i - target_pos)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_pos = i
+
+    if best_pos > 0:
+        return text[:best_pos].rstrip() + '\n' + text[best_pos:].lstrip()
+
+    return text  # 끊을 곳이 없으면 그대로
+
+
 def fit_font_size(text, box_width_inches, max_font_size, bold=False, min_font_size=9):
-    """텍스트가 박스 폭에 들어가는 최대 폰트 크기를 반환.
-    max_font_size에서 시작해서 1pt씩 줄여가며 확인."""
+    """텍스트가 박스 폭에 들어가는 최대 폰트 크기를 반환."""
     for fs in range(max_font_size, min_font_size - 1, -1):
         estimated = estimate_text_width(text, fs, bold)
         if estimated <= box_width_inches:
@@ -110,26 +158,23 @@ def set_slide_bg(slide, color):
 def add_textbox(slide, left, top, width, height, text="",
                 font_size=14, bold=False, color=C_TEXT_BLACK,
                 font_name=FONT_FAMILY, align=PP_ALIGN.LEFT,
-                anchor=MSO_ANCHOR.TOP, auto_fit=True):
-    """텍스트 박스 추가 (자동 폰트 축소 지원)"""
+                anchor=MSO_ANCHOR.TOP):
+    """텍스트 박스 추가 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
+    box_w = width / 914400  # EMU to inches
+    processed_text = semantic_line_break(text, box_w, font_size, bold) if text else text
+
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.word_wrap = True
     tf.auto_size = None
 
-    # 자동 폰트 축소: 텍스트가 박스 폭에 맞는지 확인
-    actual_fs = font_size
-    if auto_fit and text:
-        box_w = width / 914400  # EMU to inches
-        actual_fs = fit_font_size(text, box_w, font_size, bold)
-
     p = tf.paragraphs[0]
-    p.text = text
+    p.text = processed_text
     p.alignment = align
     run = p.runs[0] if p.runs else p.add_run()
     if not p.runs:
-        run.text = text
-    run.font.size = Pt(actual_fs)
+        run.text = processed_text
+    run.font.size = Pt(font_size)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -157,26 +202,21 @@ def add_rect(slide, left, top, width, height,
 
 def add_text_to_shape(shape, text, font_size=12, bold=False,
                       color=C_TEXT_BLACK, font_name=FONT_FAMILY,
-                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP,
-                      auto_fit=True):
-    """도형 내부에 텍스트 설정 (자동 폰트 축소 지원)"""
+                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP):
+    """도형 내부에 텍스트 설정 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
     tf = shape.text_frame
     tf.word_wrap = True
     tf.auto_size = None
 
-    # 자동 폰트 축소
-    actual_fs = font_size
-    if auto_fit and text:
-        box_w = shape.width / 914400  # EMU to inches
-        # 내부 패딩 고려 (좌우 합계 약 0.15")
-        usable_w = max(box_w - 0.15, 0.3)
-        actual_fs = fit_font_size(text, usable_w, font_size, bold)
+    box_w = shape.width / 914400
+    usable_w = max(box_w - 0.15, 0.3)
+    processed_text = semantic_line_break(text, usable_w, font_size, bold) if text else text
 
     p = tf.paragraphs[0]
-    p.text = text
+    p.text = processed_text
     p.alignment = align
     run = p.runs[0]
-    run.font.size = Pt(actual_fs)
+    run.font.size = Pt(font_size)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -184,13 +224,13 @@ def add_text_to_shape(shape, text, font_size=12, bold=False,
 
 
 def add_multiline_textbox(slide, left, top, width, height, lines,
-                          anchor=MSO_ANCHOR.TOP, auto_fit=True):
-    """여러 줄 텍스트 박스 (각 줄에 font_size, bold, color 지정, 자동 폰트 축소)"""
+                          anchor=MSO_ANCHOR.TOP):
+    """여러 줄 텍스트 박스 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.word_wrap = True
     tf.auto_size = None
-    box_w = width / 914400  # EMU to inches
+    box_w = width / 914400
 
     for i, line in enumerate(lines):
         if i == 0:
@@ -202,11 +242,10 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
         fs = line.get("font_size", 14)
         bold = line.get("bold", False)
 
-        # 자동 폰트 축소
-        if auto_fit and text:
-            fs = fit_font_size(text, box_w, fs, bold)
+        # 의미 단위 줄바꿈 (폰트 크기는 유지)
+        processed = semantic_line_break(text, box_w, fs, bold) if text else text
 
-        p.text = text
+        p.text = processed
         p.alignment = line.get("align", PP_ALIGN.LEFT)
         p.space_after = Pt(0)
         p.space_before = Pt(0)
@@ -214,7 +253,7 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
             run = p.runs[0]
         else:
             run = p.add_run()
-            run.text = text
+            run.text = processed
         run.font.size = Pt(fs)
         run.font.bold = bold
         run.font.color.rgb = line.get("color", C_TEXT_BLACK)
@@ -223,29 +262,44 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
 
 
 def add_insight_line(slide, text):
-    """하단 인사이트 라인 (=> 접두어 + Bold + 중앙 정렬, 자동 폰트 축소)"""
+    """하단 인사이트 라인 (=> 접두어 + 18pt Bold 고정 + 중앙 정렬)
+    18pt 고정. 폭 초과 시 의미 단위로 줄바꿈하여 2줄까지 허용.
+    2줄이 되면 y좌표를 한 줄분 위로 올려서 공간 확보."""
     full_text = f"=> {text}"
     box_w = CONTENT_W / 914400  # 8.60"
-    actual_fs = fit_font_size(full_text, box_w, 18, bold=True, min_font_size=11)
+    processed = semantic_line_break(full_text, box_w, 18, bold=True)
+
+    # 2줄이면 높이를 0.60"로 확장하고 y를 위로
+    is_two_lines = '\n' in processed
+    insight_h = Inches(0.60) if is_two_lines else ZONE_INSIGHT_H
+    insight_y = Inches(4.60) if is_two_lines else ZONE_INSIGHT_Y
 
     txBox = slide.shapes.add_textbox(
-        MARGIN_LEFT, ZONE_INSIGHT_Y, CONTENT_W, ZONE_INSIGHT_H
+        MARGIN_LEFT, insight_y, CONTENT_W, insight_h
     )
     tf = txBox.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
     p.alignment = PP_ALIGN.CENTER
 
+    # processed에서 "=> " 접두어와 본문을 분리
+    if processed.startswith("=> "):
+        prefix = "=> "
+        body = processed[3:]
+    else:
+        prefix = ""
+        body = processed
+
     run1 = p.add_run()
-    run1.text = "=> "
-    run1.font.size = Pt(actual_fs)
+    run1.text = prefix
+    run1.font.size = Pt(18)
     run1.font.bold = True
     run1.font.color.rgb = C_TEXT_BLACK
     run1.font.name = FONT_FAMILY
 
     run2 = p.add_run()
-    run2.text = text
-    run2.font.size = Pt(actual_fs)
+    run2.text = body
+    run2.font.size = Pt(18)
     run2.font.bold = True
     run2.font.color.rgb = C_TEXT_BLACK
     run2.font.name = FONT_FAMILY
