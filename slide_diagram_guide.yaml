@@ -283,6 +283,26 @@ design:
       position: 'y: 4.85" (슬라이드 하단, design.spacing_system.zones.insight 참조)'
       rule: "해당 슬라이드의 핵심 takeaway를 한 줄로. Action Title과 같은 메시지를 다른 표현으로 강화. 새 메시지 추가 금지."
 
+  # ── 색상 대비 원칙 ────────────────────────
+  color_contrast:
+    rule: >
+      배경색과 텍스트색 사이에 충분한 명도 차이가 있어야 한다.
+      밝은 배경(#D9D9D9, #FFFFFF)에는 어두운 텍스트(#1A1A1A)만 사용한다.
+      어두운 배경(#1A1A1A)에는 밝은 텍스트(#FFFFFF)만 사용한다.
+      회색 텍스트(#808080, #BBBBBB)는 밝은 배경 위에서 가시성이 떨어지므로,
+      캡션·주석 용도에만 사용하고 정보 전달 텍스트에는 사용 금지.
+    allowed_combinations:
+      - { bg: "#1A1A1A", text: "#FFFFFF", use: "다크 슬라이드/다크 박스의 본문" }
+      - { bg: "#1A1A1A", text: "#BBBBBB", use: "다크 슬라이드의 보조 텍스트/캡션만 허용" }
+      - { bg: "#FFFFFF", text: "#1A1A1A", use: "화이트 슬라이드의 본문" }
+      - { bg: "#FFFFFF", text: "#555555", use: "화이트 슬라이드의 보조 텍스트/캡션만 허용" }
+      - { bg: "#D9D9D9", text: "#1A1A1A", use: "그레이 박스의 본문" }
+      - { bg: "#D9D9D9", text: "#555555", use: "그레이 박스의 보조 텍스트/캡션만 허용" }
+    forbidden:
+      - "밝은 배경(#D9D9D9, #FFFFFF)에 #808080 이상으로 밝은 텍스트"
+      - "그레이 배경(#D9D9D9)에 흰색(#FFFFFF) 텍스트"
+      - "정보 전달 텍스트(노드 라벨, 수치, 설명)에 회색 사용"
+
   # ── 캔버스 경계 원칙 ──────────────────────
   canvas_boundary:
     rule: >

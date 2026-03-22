@@ -515,7 +515,7 @@ def slide_03_new_normal(prs):
             "title": "퇴사·결원 시 → 충원 대신 AI 효율화",
             "flow": [
                 ("퇴사·결원", C_BOX_BG, C_TEXT_BLACK, False),
-                ("충원", C_BOX_BG, C_CAPTION, True),  # 취소 — 회색 텍스트
+                ("충원", C_BOX_BG, C_SUB_WHITE, True),  # 취소 — #555555
                 ("AI 효율화", C_DARK_BG, C_TEXT_WHITE, False),  # 강조
             ],
             "cases": [
@@ -529,7 +529,7 @@ def slide_03_new_normal(prs):
             "title": "인력 필요 시 → 채용 대신 AI 생산성 증대",
             "flow": [
                 ("인력 필요", C_BOX_BG, C_TEXT_BLACK, False),
-                ("채용", C_BOX_BG, C_CAPTION, True),  # 취소
+                ("채용", C_BOX_BG, C_SUB_WHITE, True),  # 취소 — #555555
                 ("AI 생산성↑", C_DARK_BG, C_TEXT_WHITE, False),  # 강조
             ],
             "cases": [
@@ -1380,7 +1380,7 @@ def slide_14_candidate_map(prs):
         elif si == 1:
             items_text = "  |  ".join([f"{n} ({r})" for n, r in stage["items"]])
             add_text_to_shape(box, items_text,
-                              font_size=8, color=C_CAPTION, align=PP_ALIGN.CENTER)
+                              font_size=8, color=C_SUB_WHITE, align=PP_ALIGN.CENTER)
         else:
             add_text_to_shape(box, "  |  ".join(stage["items"]),
                               font_size=13, bold=True, color=C_TEXT_WHITE, align=PP_ALIGN.CENTER)
@@ -2096,7 +2096,7 @@ def slide_28_risk_mid(prs):
     ]
     _risk_table_slide(prs,
         "형식화와 양극화 — 동일 직무 경쟁 평가제가 대응한다",
-        "Month 3~6", RGBColor(0xCC, 0x99, 0x00), risks,
+        "Month 3~6", C_TEXT_BLACK, risks,
         "형식화와 양극화 — 동일 직무 경쟁 평가제가 두 가지 모두에 대응")
 
 
