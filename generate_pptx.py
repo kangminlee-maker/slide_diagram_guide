@@ -1734,7 +1734,7 @@ def slide_19_why_policy(prs):
     """슬라이드 19: 왜 제도가 필요한가 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질", chapter="Part 4 — Layer 2 제도 설계")
+    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질", chapter="Part 4 — Layer 2 제도 설계 (4가지)")
 
     obstacles = [
         {"num": "①", "problem": "유인 없음", "desc": "AI 활용이 평가에 미반영 → 변화 거부",
@@ -1775,7 +1775,7 @@ def slide_20_policy1(prs):
     """슬라이드 20: 제도 1 — AI-First 채용 원칙 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값이 된다", chapter="Part 4 — 진입 차단: AI-First 채용 원칙")
+    add_white_title(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값이 된다", chapter="Part 4 [1/4] 진입 차단 — AI-First 채용 원칙")
 
     # 의사결정 플로우
     flow_items = [
@@ -1824,7 +1824,7 @@ def slide_21_policy2(prs):
     """슬라이드 21: 제도 2 — 생산성 KPI 의무화 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "모든 조직장에게 동일한 생산성 목표를 부여한다", chapter="Part 4 — 목표 부여: 인당 생산성 KPI")
+    add_white_title(slide, "모든 조직장에게 동일한 생산성 목표를 부여한다", chapter="Part 4 [2/4] 목표 부여 — 인당 생산성 KPI")
 
     # 피라미드 3단
     levels = [
@@ -1861,7 +1861,7 @@ def slide_22_policy3(prs):
     """슬라이드 22: 제도 3 — 동일 직무 경쟁 평가제 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라와야 한다", chapter="Part 4 — 경쟁 유도: 동일 직무 경쟁 평가제")
+    add_white_title(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라와야 한다", chapter="Part 4 [3/4] 경쟁 유도 — 동일 직무 경쟁 평가제")
 
     # VS 구조
     left_box = add_rect(slide, Inches(0.90), Inches(1.80), Inches(3.50), Inches(1.20),
@@ -1908,7 +1908,7 @@ def slide_23_policy4(prs):
     """슬라이드 23: 제도 4 — AI 챔피언 제도 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "챔피언은 부서의 변화를 이끄는 동시에, Layer 1과의 연결점이 된다", chapter="Part 4 — 지속 운영: AI 챔피언 제도")
+    add_white_title(slide, "챔피언은 부서의 변화를 이끄는 동시에, Layer 1과의 연결점이 된다", chapter="Part 4 [4/4] 지속 운영 — AI 챔피언 제도")
 
     # 중앙 허브
     hub = add_rect(slide, Inches(4.00), Inches(2.20), Inches(2.00), Inches(0.60),
