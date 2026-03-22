@@ -812,7 +812,7 @@ def slide_09_synergy(prs):
     """슬라이드 9: 두 Layer의 상호보완 구조 (화이트, 3단 번호 목록)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 완성")
+    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능")
 
     sections = [
         {
