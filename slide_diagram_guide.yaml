@@ -418,6 +418,147 @@ design:
         diagram: "매트릭스 그리드 — 행/열 축에 라벨, 교차점을 셀로 표현"
         style: "첫 행/첫 열을 다크 배경으로 축 역할 강조"
 
+  # ── 용어 통일 원칙 ──────────────────────────
+  terminology:
+    rule: >
+      같은 개념은 슬라이드 전체에서 동일한 정식 명칭으로만 표현한다.
+      동의어, 유사 표현, 축약형의 혼용은 금지한다.
+      정식 명칭을 한 번 정하면, 해당 개념을 언급할 때 항상 그 명칭을 사용한다.
+    canonical_terms:
+      # 전략 구조
+      layer_1:
+        canonical: "Layer 1"
+        short: "L1"
+        definition: "CAIO가 주도하는 구조화 자동화 (온톨로지 기반)"
+        forbidden: ["레이어 1", "1단계 전략", "자동화 레이어"]
+        usage: "처음 등장 시 'Layer 1 (구조화 자동화)'로 풀네임, 이후 'Layer 1' 또는 'L1' 사용"
+
+      layer_2:
+        canonical: "Layer 2"
+        short: "L2"
+        definition: "각 부서가 자율적으로 AI 도구를 활용하여 업무를 효율화하는 영역"
+        forbidden: ["레이어 2", "2단계 전략", "활용 레이어"]
+        usage: "처음 등장 시 'Layer 2 (AI 도구 활용)'로 풀네임, 이후 'Layer 2' 또는 'L2' 사용"
+
+      # 추진 방향
+      top_down:
+        canonical: "Top-down"
+        definition: "CAIO가 전사 차원에서 설계·구축하는 방향"
+        forbidden: ["CAIO 주도", "위에서 아래로", "하향식"]
+        usage: "'Top-down (CAIO)'로 표기. 단독 사용 시 'Top-down'"
+
+      bottom_up:
+        canonical: "Bottom-up"
+        definition: "각 부서가 자율적으로 AI를 채택하는 방향"
+        forbidden: ["각 부서 자율", "현장 주도", "상향식"]
+        usage: "'Bottom-up (각 부서)'로 표기. 단독 사용 시 'Bottom-up'"
+
+      # 핵심 메커니즘
+      l2_to_l1:
+        canonical: "L2→L1 편입"
+        definition: "Layer 2에서 검증된 부서 성과를 Layer 1의 자동화 워크플로우에 통합하는 과정"
+        forbidden: ["편입 검토", "L1 편입", "시스템화", "표준화"]
+        usage: "항상 'L2→L1 편입'으로 표기. 방향성(L2에서 L1으로)을 포함해야 함"
+
+      # 목표 지표
+      productivity:
+        canonical: "인당 생산성"
+        definition: "직원 1인당 산출하는 매출 또는 성과"
+        forbidden: ["생산성", "효율성", "인당 매출"]
+        usage: >
+          목표 수치를 언급할 때: '인당 생산성 28%↑'
+          구체적 금액을 언급할 때: '인당 생산성 2.34억→3억 원'
+
+      # 행동 원칙
+      hiring_freeze:
+        canonical: "채용 동결"
+        definition: "퇴사·결원 발생 시 충원하지 않고 AI로 업무를 흡수하는 원칙"
+        forbidden: ["충원 동결", "미충원", "재충원 없음", "충원 대신"]
+
+      ai_utilization:
+        canonical: "AI 활용"
+        definition: "AI 도구를 사용하여 업무를 수행하는 행위 전반"
+        forbidden: ["AI 처리", "AI 효율화"]
+        note: "'자동화'는 Layer 1의 구조적 자동화를 의미하므로, Layer 2에서는 'AI 활용'을 사용"
+
+      automation:
+        canonical: "자동화"
+        definition: "Layer 1에서 규칙과 데이터 구조를 코드화하여 반복 업무를 기계적으로 처리하는 것"
+        forbidden: ["효율화 (L1 맥락에서)", "AI 처리 (L1 맥락에서)"]
+        note: "'자동화'는 Layer 1 전용. Layer 2에서는 'AI 활용'을 사용"
+
+      # 4가지 제도
+      policy_1: { canonical: "AI-First 채용 원칙", short: "제도 1" }
+      policy_2: { canonical: "인당 생산성 KPI 의무화", short: "제도 2" }
+      policy_3: { canonical: "동일 직무 경쟁 평가제", short: "제도 3" }
+      policy_4: { canonical: "AI 챔피언 제도", short: "제도 4" }
+
+  # ── 설명 구조 (Narrative Structure) ────────
+  narrative_structure:
+    description: >
+      32장의 슬라이드는 청중이 머릿속에 하나의 구조적 이미지를 형성하도록 설계된다.
+      그 이미지는 "두 개의 화살표(Top-down + Bottom-up)가 만나서 순환하는 구조"이다.
+      모든 슬라이드는 이 이미지의 일부를 설명하거나 근거를 제시하는 역할을 한다.
+
+    core_image: >
+      [Top-down: CAIO → Layer 1 (자동화)] + [Bottom-up: 각 부서 → Layer 2 (AI 활용)]
+      → L2→L1 편입 → 인당 생산성↑ → 인건비 절감
+
+    flow:
+      part_1:
+        slides: "1~7"
+        role: "위기감 형성 — '왜 해야 하는가?'"
+        structure: >
+          글로벌 사례(외부) → New Normal(패턴) → 우리의 위기(내부) → 현재 구조의 문제(데이터) → 목표 제시
+        key_transition: "S7에서 '성장→인력 추가 고리를 끊는다'는 선언으로 Part 2로 전환"
+
+      part_2:
+        slides: "8~12"
+        role: "구조 제시 — '어떤 방식으로?'"
+        structure: >
+          두 Layer 소개 → 상호보완 구조(core_image 제시) → 각 Layer의 외부 검증 사례 → 통합 로드맵 개요
+        key_transition: "S12에서 '2개월 완성 + 즉시 시작' 선언으로 Part 3으로 전환"
+
+      part_3:
+        slides: "13~18"
+        role: "Layer 1 상세 — '구체적으로 뭘, 언제까지?'"
+        structure: >
+          기술 접근 → 후보 선별(퍼널) → 비교·권고 → 문제 상세 → 실행 계획(간트) → 성공 지표·방어선
+
+      part_4:
+        slides: "19~23"
+        role: "Layer 2 상세 — '어떻게 작동시키는가?'"
+        structure: >
+          왜 제도가 필요한가(3가지 장애물) → 제도 1(채용) → 제도 2(KPI) → 제도 3(경쟁 평가) → 제도 4(챔피언)
+
+      part_5:
+        slides: "24~26"
+        role: "통합 — '합치면 어떤 결과?'"
+        structure: >
+          통합 타임라인 → 기대 효과(L1 직접 + L2 간접) → CAIO 역할·성장 경로
+
+      part_6:
+        slides: "27~29"
+        role: "리스크 대응 — '안 되면 어쩌나?'"
+        structure: >
+          초기 리스크(Month 1~2) → 안정기 리스크(Month 3~6) → 장기 리스크(Month 7~)
+        note: "시간축으로 분류하여 '언제 어떤 문제가 올 수 있는가'를 구조적으로 전달"
+
+      part_7:
+        slides: "30~32"
+        role: "결정 요청 — '지금 뭘 결정해야 하는가?'"
+        structure: >
+          핵심 요약(core_image 반복) → 6건 의사결정 체크리스트 → Q&A
+
+    repetition_points:
+      description: "core_image를 반복적으로 강화하는 슬라이드"
+      slides:
+        - { slide: 8, role: "core_image 첫 등장 — 두 Layer 소개" }
+        - { slide: 9, role: "core_image 상세화 — 상호보완 사이클" }
+        - { slide: 12, role: "core_image + 시간축 — 로드맵 개요" }
+        - { slide: 24, role: "core_image + 시간축 상세 — 통합 타임라인" }
+        - { slide: 30, role: "core_image 최종 요약" }
+
   # ── 라이팅 규칙 ──────────────────────────
   writing:
     tone:
