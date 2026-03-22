@@ -341,13 +341,23 @@ def add_insight_line(slide, text):
 
 
 def add_white_title(slide, text):
-    """화이트 슬라이드 제목 (zones.title) — 22pt 고정, 의미 줄바꿈"""
-    add_textbox(
-        slide, MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, ZONE_TITLE_H,
-        text=text, font_size=22, bold=True, color=C_TEXT_BLACK,
-        font_name=FONT_FAMILY_BLACK, align=PP_ALIGN.LEFT,
-        anchor=MSO_ANCHOR.TOP, fixed_size=True
+    """화이트 슬라이드 제목 (zones.title) — 22pt Bold, 줄바꿈 없이 한 줄"""
+    txBox = slide.shapes.add_textbox(
+        MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, ZONE_TITLE_H
     )
+    tf = txBox.text_frame
+    tf.word_wrap = True
+    tf.auto_size = None
+    p = tf.paragraphs[0]
+    p.text = text
+    p.alignment = PP_ALIGN.LEFT
+    run = p.runs[0] if p.runs else p.add_run()
+    if not p.runs:
+        run.text = text
+    run.font.size = Pt(22)
+    run.font.bold = True
+    run.font.color.rgb = C_TEXT_BLACK
+    run.font.name = FONT_FAMILY_BLACK
 
 
 def card_x(n, idx):
