@@ -269,7 +269,7 @@ def slide_02_global_cases(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환")
+    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환 중")
 
     companies = [
         {"name": "Klarna",   "industry": "핀테크",   "metric": "-47%",    "detail": "5,527→2,907명", "result": "인당 매출 73%↑"},
