@@ -283,6 +283,66 @@ design:
       position: 'y: 4.85" (슬라이드 하단, design.spacing_system.zones.insight 참조)'
       rule: "해당 슬라이드의 핵심 takeaway를 한 줄로. Action Title과 같은 메시지를 다른 표현으로 강화. 새 메시지 추가 금지."
 
+  # ── 캔버스 경계 원칙 ──────────────────────
+  canvas_boundary:
+    rule: >
+      모든 시각 요소(도형, 텍스트, 이미지)는 캔버스의 안전 영역 안에 배치해야 한다.
+      안전 영역 밖으로 요소가 삐져나가는 것은 금지한다.
+    safe_area:
+      left: '0.70"'
+      right: '9.30"'
+      top: '0.30"'
+      bottom: '5.30"'
+      note: "left = margin_left(0.70\"), right = canvas_width(10\") - margin_right(0.70\"), bottom은 인사이트 라인 아래 여백 확보"
+    validation:
+      - "레이아웃 계산 시 요소의 x + width가 9.30\"를 초과하지 않는가?"
+      - "등분 배치(equal_distribution) 사용 시 라벨 폭 + N열 합산이 content_width(8.60\")를 초과하지 않는가?"
+      - "사이클/방사형 도식의 노드가 safe_area 밖으로 나가지 않는가?"
+
+  # ── 시각적 위계 원칙 ────────────────────────
+  visual_emphasis:
+    rule: >
+      슬라이드에서 가장 중요한 메시지(핵심 수치, 결론)는
+      시각적 무게(다크 배경, 대형 폰트, 넓은 면적)로 강조한다.
+      보조 정보는 작은 폰트와 밝은 배경으로 위계를 낮춘다.
+    patterns:
+      big_number:
+        description: "핵심 수치 1~2개를 슬라이드의 시각적 중심으로 배치"
+        style: "다크 배경(#1A1A1A) + 28~40pt Bold 흰색 텍스트"
+        position: "콘텐츠 존 상단 또는 중앙, 전폭 또는 반폭"
+      card_zoning:
+        description: "카드를 기능별 영역(헤더/핵심/결과)으로 분리하여 시각적 위계를 명확하게 구성"
+        structure: |
+          - 헤더 영역 (흰 배경): 카테고리명, 라벨
+          - 핵심 영역 (다크 배경): 핵심 수치 또는 핵심 메시지
+          - 결과 영역 (그레이 배경): 결과, 부연 설명
+      cancelled_item:
+        description: "기존 방식/대안이 폐기됨을 시각적으로 표현"
+        style: "회색(#808080) 텍스트 + 빨간색(#CC3333) 가로 취소선"
+
+  # ── 도식 선택 보강 원칙 ──────────────────────
+  diagram_selection_supplement:
+    description: >
+      message_types의 도식 선택 규칙을 보완하는 추가 원칙.
+      메시지의 구조적 특성에 따라 도식을 선택할 때 참고한다.
+    patterns:
+      cycle:
+        trigger: "요소 간 순환 관계가 핵심일 때 (A→B→C→A)"
+        diagram: "사이클 다이어그램 — 3~5개 노드를 원형 배치, 시계방향 화살표"
+        avoid: "순환을 번호 목록으로 표현하면 순환이 보이지 않음"
+      funnel:
+        trigger: "전체에서 일부를 선별/필터링하는 과정일 때 (N개→M개)"
+        diagram: "퍼널(깔때기) — 넓은 입구(전체)에서 좁은 출구(선별)로 단계적 축소"
+        avoid: "필터링 과정을 리스트로 나열하면 '좁혀가는' 느낌이 전달되지 않음"
+      horizontal_bar:
+        trigger: "항목별 수량/시간을 비교할 때"
+        diagram: "가로 막대 — 길이를 실제 값에 비례시켜 크기 차이를 시각적으로 전달"
+        avoid: "동일 폭 박스에 수치만 텍스트로 적으면 비교가 안 됨"
+      matrix_grid:
+        trigger: "두 축의 조합이 핵심 메시지일 때 (M×N)"
+        diagram: "매트릭스 그리드 — 행/열 축에 라벨, 교차점을 셀로 표현"
+        style: "첫 행/첫 열을 다크 배경으로 축 역할 강조"
+
   # ── 라이팅 규칙 ──────────────────────────
   writing:
     tone:
