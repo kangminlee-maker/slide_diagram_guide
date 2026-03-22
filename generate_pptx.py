@@ -2341,7 +2341,7 @@ def main():
 
     # ── 중간 제목: Part 1 후반 (위기감) ──
     add_section_title(prs,
-        "AI 시대, 비용 구조가\n바뀌고 있다",
+        "AI 시대, 비용 구조가 바뀌고 있다",
         "Part 1 — 우리에게도 해당되는 변화")
 
     slide_05_disruption(prs)
@@ -2350,7 +2350,7 @@ def main():
 
     # ── 중간 제목: Part 2 (전략 프레임워크) ──
     add_section_title(prs,
-        "AI 전환 전략\n프레임워크",
+        "AI 전환 전략 프레임워크",
         "Part 2 — 두 가지 Layer로 구성된 전략")
 
     slide_08_two_layers(prs)
@@ -2358,7 +2358,7 @@ def main():
 
     # ── 중간 제목: Part 2 후반 (검증 사례) ──
     add_section_title(prs,
-        "글로벌 기업에서\n검증된 접근",
+        "글로벌 기업에서 검증된 접근",
         "Part 2 — Layer 1과 Layer 2의 참고 사례")
 
     slide_10_palantir(prs)
@@ -2367,7 +2367,7 @@ def main():
 
     # ── 중간 제목: Part 3 (Layer 1 상세) ──
     add_section_title(prs,
-        "Layer 1 — 구조화 자동화\n첫 프로젝트와 실행",
+        "Layer 1 — 구조화 자동화, 첫 프로젝트와 실행",
         "Part 3 — 무엇을, 언제까지, 어떻게")
 
     slide_13_tech_approach(prs)
@@ -2379,7 +2379,7 @@ def main():
 
     # ── 중간 제목: Part 4 (Layer 2 제도) ──
     add_section_title(prs,
-        "Layer 2 — AI 도구 활용\n제도 설계",
+        "Layer 2 — AI 도구 활용 제도 설계",
         "Part 4 — 진입 차단 → 목표 부여 → 경쟁 유도 → 지속 운영")
 
     slide_19_why_policy(prs)
@@ -2390,7 +2390,7 @@ def main():
 
     # ── 중간 제목: Part 5 (통합) ──
     add_section_title(prs,
-        "통합 로드맵과\n기대 효과",
+        "통합 로드맵과 기대 효과",
         "Part 5 — 두 Layer를 합치면")
 
     slide_24_integrated_timeline(prs)
@@ -2399,7 +2399,7 @@ def main():
 
     # ── 중간 제목: Part 6 (리스크) ──
     add_section_title(prs,
-        "예상 리스크와\n대응 설계",
+        "예상 리스크와 대응 설계",
         "Part 6 — 초기 → 안정기 → 장기")
 
     slide_27_risk_early(prs)
