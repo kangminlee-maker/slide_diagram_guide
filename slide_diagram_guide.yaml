@@ -427,16 +427,18 @@ design:
     canonical_terms:
       # 전략 구조
       layer_1:
-        canonical: "Layer 1"
+        canonical: "Layer 1 — 구조화 자동화"
         short: "L1"
-        definition: "CAIO가 주도하는 구조화 자동화 (온톨로지 기반)"
+        definition: "CAIO가 Top-down으로 전사 데이터 구조를 설계하고, 반복 업무를 자동화하는 영역"
+        position: "전략의 기반층. Layer 2의 성과가 여기에 편입되어 시스템화됨"
         forbidden: ["레이어 1", "1단계 전략", "자동화 레이어"]
         usage: "처음 등장 시 'Layer 1 (구조화 자동화)'로 풀네임, 이후 'Layer 1' 또는 'L1' 사용"
 
       layer_2:
-        canonical: "Layer 2"
+        canonical: "Layer 2 — AI 도구 활용"
         short: "L2"
-        definition: "각 부서가 자율적으로 AI 도구를 활용하여 업무를 효율화하는 영역"
+        definition: "각 부서가 Bottom-up으로 AI 도구를 활용하여 업무를 효율화하는 영역"
+        position: "전략의 활용층. 성과가 검증되면 Layer 1에 편입됨"
         forbidden: ["레이어 2", "2단계 전략", "활용 레이어"]
         usage: "처음 등장 시 'Layer 2 (AI 도구 활용)'로 풀네임, 이후 'Layer 2' 또는 'L2' 사용"
 
@@ -487,11 +489,33 @@ design:
         forbidden: ["효율화 (L1 맥락에서)", "AI 처리 (L1 맥락에서)"]
         note: "'자동화'는 Layer 1 전용. Layer 2에서는 'AI 활용'을 사용"
 
-      # 4가지 제도
-      policy_1: { canonical: "AI-First 채용 원칙", short: "제도 1" }
-      policy_2: { canonical: "인당 생산성 KPI 의무화", short: "제도 2" }
-      policy_3: { canonical: "동일 직무 경쟁 평가제", short: "제도 3" }
-      policy_4: { canonical: "AI 챔피언 제도", short: "제도 4" }
+      # Layer 2의 4가지 제도 — 이름에 의미(무엇)와 순서(흐름)를 모두 포함
+      # 순서: 진입 차단(채용) → 목표 부여(KPI) → 경쟁 유도(평가) → 지속 운영(챔피언)
+      l2_policies:
+        naming_principle: >
+          넘버링만 있는 이름(제도 1)은 의미를 파악할 수 없으므로 금지.
+          의미만 있는 이름(AI-First 채용 원칙)은 전체 구조에서의 위치를 모르므로 불충분.
+          이름에 '무엇을 하는 제도인가' + '4가지 중 어디에 해당하는가'를 모두 담는다.
+        items:
+          - canonical: "진입 차단 — AI-First 채용 원칙"
+            short: "채용 원칙"
+            position: "1/4: 불필요한 인력 유입을 막는 첫 번째 관문"
+            forbidden: ["제도 1", "채용 동결 제도"]
+
+          - canonical: "목표 부여 — 인당 생산성 KPI 의무화"
+            short: "생산성 KPI"
+            position: "2/4: 전 조직장에게 동일한 목표를 부여"
+            forbidden: ["제도 2", "KPI 제도"]
+
+          - canonical: "경쟁 유도 — 동일 직무 경쟁 평가제"
+            short: "경쟁 평가제"
+            position: "3/4: 같은 일을 하는 팀 간 AI 성과로 경쟁"
+            forbidden: ["제도 3", "평가 제도"]
+
+          - canonical: "지속 운영 — AI 챔피언 제도"
+            short: "챔피언 제도"
+            position: "4/4: 부서 내 변화를 이끌고 L2→L1 편입을 연결"
+            forbidden: ["제도 4", "챔피언"]
 
   # ── 설명 구조 (Narrative Structure) ────────
   narrative_structure:
