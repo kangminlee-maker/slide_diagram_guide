@@ -49,7 +49,7 @@ design:
   # ── 타이포그래피 ───────────────────────────
   typography:
     slide_title_dark:  { font: "Noto Sans KR Black", size: "26~35pt", weight: "Bold" }
-    slide_title_white: { font: "Noto Sans KR Black", size: "22pt",    weight: "Bold" }
+    slide_title_white: { font: "Noto Sans KR Black", size: "20pt",    weight: "Bold" }
     body_emphasis:     { font: "Noto Sans KR",       size: "15~16pt", weight: "Bold" }
     body_regular:      { font: "Noto Sans KR",       size: "14~15pt", weight: "Regular" }
     box_title:         { font: "Noto Sans KR Black", size: "13~15pt", weight: "Bold" }
@@ -72,7 +72,7 @@ design:
       when: "데이터 / 상세 설명 / 도식"
       bg: "#FFFFFF"
       title_position: 'y: 0.4", h: 1.1"'
-      title_style: "22pt Bold, #1A1A1A"
+      title_style: "20pt Bold, #1A1A1A"
       body_start_y: '1.65"'
       margin_left: '0.7"'
       content_width: '8.6"'
@@ -278,10 +278,15 @@ design:
     insight_line:
       prefix: "=>"
       weight: "Bold"
-      size: "18pt"
+      size: "18pt (고정, 변경 금지)"
       align: "중앙 정렬 (좌우 가운데)"
       position: 'y: 4.85" (슬라이드 하단, design.spacing_system.zones.insight 참조)'
+      max_length: "약 25자 이내 (18pt Bold 기준 content_width 8.60\" 내 1줄 보장)"
       rule: "해당 슬라이드의 핵심 takeaway를 한 줄로. Action Title과 같은 메시지를 다른 표현으로 강화. 새 메시지 추가 금지."
+      forbidden:
+        - "폰트 크기 변경 (18pt 고정)"
+        - "2줄 이상으로 줄바꿈 (다른 요소와 겹침 발생)"
+        - "y좌표 변경 (4.85\" 고정)"
 
   # ── 색상 대비 원칙 ────────────────────────
   color_contrast:
@@ -302,6 +307,56 @@ design:
       - "밝은 배경(#D9D9D9, #FFFFFF)에 #808080 이상으로 밝은 텍스트"
       - "그레이 배경(#D9D9D9)에 흰색(#FFFFFF) 텍스트"
       - "정보 전달 텍스트(노드 라벨, 수치, 설명)에 회색 사용"
+
+  # ── 텍스트 처리 원칙 ──────────────────────
+  text_handling:
+    description: >
+      텍스트 요소를 위계 요소와 본문 요소로 구분하여 서로 다른 규칙을 적용한다.
+      위계 요소는 슬라이드 전체에서 일정한 크기·위치를 유지하여 인지 패턴을 형성한다.
+      본문 요소는 공간에 맞춰 크기를 조정할 수 있다.
+
+    hierarchy_elements:
+      description: >
+        폰트 크기를 고정하고, 줄바꿈이 필요하면 의미 단위(어절·쉼표·기호)로 끊는다.
+        글자 중간에서 끊기는 것은 금지한다.
+        슬라이드마다 크기가 달라지면 구조적 인지가 깨지므로, 크기를 줄이는 것은 금지한다.
+      elements:
+        headline:
+          size: "20pt"
+          weight: "Bold"
+          font: "Noto Sans KR Black"
+          line_break: "줄바꿈 없이 한 줄로 작성. 파워포인트가 자동 줄바꿈하더라도 폰트가 일관되게 유지되어야 함"
+        insight_line:
+          size: "18pt"
+          weight: "Bold"
+          align: "중앙 정렬"
+          position: 'y: 4.85"'
+          line_break: "반드시 1줄에 들어가는 길이로 작성 (18pt Bold 기준 content_width 8.60\" 내, 약 25자 이내)"
+          forbidden: "폰트 크기 변경, 위치 변경, 2줄 이상"
+        section_label:
+          size: "12~15pt"
+          weight: "Bold"
+          line_break: "줄바꿈 없이 한 줄"
+
+    body_elements:
+      description: >
+        텍스트가 박스 폭을 초과하면 폰트 크기를 축소할 수 있다 (최소 9pt).
+        축소 시에도 같은 레벨의 요소끼리는 동일한 크기를 유지한다.
+      elements:
+        - "카드 본문 (11~13pt)"
+        - "표 셀 (9~11pt)"
+        - "보조 텍스트 (9~10pt)"
+        - "캡션 (8~9pt)"
+
+    line_break_priority:
+      description: "의미 단위로 줄바꿈할 때의 우선순위"
+      order:
+        - "1순위: 쉼표(,) 뒤"
+        - "2순위: 공백( ) 뒤"
+        - "3순위: 기호(→, +, —) 앞 또는 뒤"
+      forbidden:
+        - "글자 중간(어절 내부)에서 끊기"
+        - "조사(은/는/이/가/을/를)와 명사 사이에서 끊기"
 
   # ── 캔버스 경계 원칙 ──────────────────────
   canvas_boundary:
