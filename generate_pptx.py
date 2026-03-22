@@ -380,20 +380,39 @@ def card_x(n, idx):
 # ── 슬라이드 생성 함수 ────────────────────────
 
 def add_section_title(prs, title, subtitle=None):
-    """중간 제목 슬라이드 (다크 배경) — Part 전환점"""
+    """중간 제목 슬라이드 (다크 배경) — Part 전환점. 줄바꿈 없이 원문 그대로."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_DARK_BG)
 
-    add_textbox(slide, MARGIN_LEFT, Inches(1.80), CONTENT_W, Inches(1.20),
-                text=title, font_size=28, bold=True,
-                color=C_TEXT_WHITE, font_name=FONT_FAMILY_BLACK,
-                align=PP_ALIGN.LEFT)
+    # 제목 — 줄바꿈/폰트 축소 없이 원문 그대로
+    txBox = slide.shapes.add_textbox(MARGIN_LEFT, Inches(1.80), CONTENT_W, Inches(1.20))
+    tf = txBox.text_frame
+    tf.word_wrap = True
+    tf.auto_size = None
+    p = tf.paragraphs[0]
+    p.text = title
+    p.alignment = PP_ALIGN.LEFT
+    run = p.runs[0] if p.runs else p.add_run()
+    if not p.runs:
+        run.text = title
+    run.font.size = Pt(28)
+    run.font.bold = True
+    run.font.color.rgb = C_TEXT_WHITE
+    run.font.name = FONT_FAMILY_BLACK
 
     if subtitle:
-        add_textbox(slide, MARGIN_LEFT, Inches(3.20), CONTENT_W, Inches(0.40),
-                    text=subtitle, font_size=14,
-                    color=C_SUB_DARK, font_name=FONT_FAMILY,
-                    align=PP_ALIGN.LEFT)
+        txBox2 = slide.shapes.add_textbox(MARGIN_LEFT, Inches(3.20), CONTENT_W, Inches(0.40))
+        tf2 = txBox2.text_frame
+        tf2.word_wrap = True
+        p2 = tf2.paragraphs[0]
+        p2.text = subtitle
+        p2.alignment = PP_ALIGN.LEFT
+        run2 = p2.runs[0] if p2.runs else p2.add_run()
+        if not p2.runs:
+            run2.text = subtitle
+        run2.font.size = Pt(14)
+        run2.font.color.rgb = C_SUB_DARK
+        run2.font.name = FONT_FAMILY
 
 
 def slide_01_cover(prs):
