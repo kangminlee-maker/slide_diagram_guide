@@ -976,17 +976,19 @@ def slide_08_two_layers(prs):
         {
             "title": "Layer 1", "subtitle": "구조화 자동화 — Palantir Approach",
             "items": [
-                ("예시", "매출 정산, 강사료 정산, 광고비 정산, 손익 보고"),
-                ("출력 성격", "결정적 — 같은 입력이면 항상 같은 결과"),
+                ("역할", "반복 업무를 자동화하여 직접적 시간·인건비 절감"),
+                ("예시", "매출 정산, 강사료, 광고비, 손익 보고"),
                 ("추진 주체", "CAIO 주도 (Top-down)"),
+                ("단독 한계", "핵심 업무만 자동화, 일상 비효율은 남음"),
             ]
         },
         {
             "title": "Layer 2", "subtitle": "AI 도구 활용 효율화",
             "items": [
-                ("예시", "상세페이지 생성, 고객 응대, 회의록, 보고서 초안, 번역"),
-                ("출력 성격", "확률적 — 매번 다른 결과 가능"),
+                ("역할", "전 부서의 일상 업무를 AI로 효율화"),
+                ("예시", "상세페이지, 고객 응대, 회의록, 보고서, 번역"),
                 ("추진 주체", "각 부서 자율 (Bottom-up)"),
+                ("단독 한계", "표준화 없이 전사 확산 불가, 퇴사 시 유실"),
             ]
         },
     ]
@@ -1004,22 +1006,24 @@ def slide_08_two_layers(prs):
                     text=layer["subtitle"], font_size=12, color=C_TEXT_BLACK)
 
         # 항목
-        item_y = card_y + Inches(0.85)
+        item_y = card_y + Inches(0.80)
         lines = []
         for label, value in layer["items"]:
             lines.append({"text": label, "font_size": 10, "bold": True,
                           "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT})
-            b = label == "추진 주체"
-            lines.append({"text": value, "font_size": 12, "bold": b,
-                          "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT})
+            b = label in ["추진 주체", "역할"]
+            c = C_ACCENT if label == "단독 한계" else C_TEXT_BLACK
+            lines.append({"text": value, "font_size": 11, "bold": b,
+                          "color": c, "align": PP_ALIGN.LEFT})
         add_multiline_textbox(slide, x + SP_LG, item_y,
-                              card_w - SP_LG * 2, Inches(1.90), lines)
+                              card_w - SP_LG * 2, Inches(1.95), lines)
 
     # 중앙 양방향 화살표 — 카드 아래 중앙에 배치
     arrow_y = card_y + card_h + SP_XXS  # 카드 바로 아래
-    arrow_box = add_rect(slide, Inches(4.20), arrow_y, Inches(1.20), Inches(0.30),
+    arrow_box = add_rect(slide, MARGIN_LEFT, arrow_y, CONTENT_W, Inches(0.30),
                          fill_color=C_DARK_BG, border_color=C_DARK_BG)
-    add_text_to_shape(arrow_box, "⟷ 상호보완", font_size=11, bold=True, color=C_TEXT_WHITE)
+    add_text_to_shape(arrow_box, "어느 하나만으로는 부족 — 두 Layer가 함께 작동해야 전사 변화 가능",
+                      font_size=10, bold=True, color=C_TEXT_WHITE)
 
     add_insight_line(slide, "Top-down + Bottom-up 병행 구조")
 
