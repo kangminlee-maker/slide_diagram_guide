@@ -1815,7 +1815,7 @@ def slide_22_policy3(prs):
         slide, Inches(1.00), Inches(1.85), Inches(3.30), Inches(1.10),
         [
             {"text": "선도 부서", "font_size": 10, "bold": True, "color": C_SUB_DARK, "align": PP_ALIGN.LEFT},
-            {"text": "패캠 마케팅팀", "font_size": 14, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
+            {"text": "A사업부 마케팅팀", "font_size": 14, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
             {"text": "AI로 캠페인 10→12건 (20%↑)", "font_size": 11, "bold": False, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
             {"text": "→ 고과 S 확정", "font_size": 12, "bold": True, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
         ]
@@ -1830,7 +1830,7 @@ def slide_22_policy3(prs):
         slide, Inches(5.70), Inches(1.85), Inches(3.30), Inches(1.10),
         [
             {"text": "대상 부서", "font_size": 10, "bold": True, "color": C_SUB_WHITE, "align": PP_ALIGN.LEFT},
-            {"text": "콜로소 마케팅팀", "font_size": 14, "bold": True, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
+            {"text": "B사업부 마케팅팀", "font_size": 14, "bold": True, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
             {"text": "20% 미달성", "font_size": 11, "bold": False, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
             {"text": "→ A 이상 불가", "font_size": 12, "bold": True, "color": C_ACCENT, "align": PP_ALIGN.LEFT},
         ]
