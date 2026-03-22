@@ -265,7 +265,9 @@ def slide_01_cover(prs):
 
 
 def slide_02_global_cases(prs):
-    """슬라이드 2: AI로 비용 구조를 바꾸고 있는 기업들 (화이트, 5열 카드)"""
+    """슬라이드 2: 글로벌 기업 사례 — 5열 카드 (재디자인)
+    개선: 핵심 수치를 다크 배경 강조 영역으로 분리, 기업명/업종을 상단 헤더로,
+    결과를 하단 독립 영역으로 시각적 위계를 명확하게 구성"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
@@ -281,50 +283,45 @@ def slide_02_global_cases(prs):
 
     n = 5
     card_w = PRESETS[n]["w"]
-    card_h = Inches(2.80)
     card_y = ZONE_CONTENT_Y
+
+    # 3개 영역: 헤더(기업명+업종) / 핵심 수치(다크) / 결과(그레이)
+    header_h = Inches(0.55)
+    metric_h = Inches(1.10)
+    result_h = Inches(0.65)
+    total_h = header_h + metric_h + result_h  # 2.30"
 
     for i, co in enumerate(companies):
         x = card_x(n, i)
 
-        # 카드 배경
-        add_rect(slide, x, card_y, card_w, card_h,
+        # 상단 헤더 영역 (흰 배경 + 테두리)
+        add_rect(slide, x, card_y, card_w, header_h,
+                 fill_color=C_WHITE_BG, border_color=C_DARK_BG)
+        add_textbox(slide, x, card_y + SP_XXS, card_w, Inches(0.30),
+                    text=co["name"], font_size=15, bold=True,
+                    color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK,
+                    align=PP_ALIGN.CENTER)
+        add_textbox(slide, x, card_y + Inches(0.32), card_w, Inches(0.20),
+                    text=co["industry"], font_size=9,
+                    color=C_CAPTION, align=PP_ALIGN.CENTER)
+
+        # 중앙 핵심 수치 영역 (다크 배경 — 시각적 무게 집중)
+        metric_y = card_y + header_h
+        add_rect(slide, x, metric_y, card_w, metric_h,
+                 fill_color=C_DARK_BG, border_color=C_DARK_BG)
+        add_textbox(slide, x, metric_y + Inches(0.15), card_w, Inches(0.55),
+                    text=co["metric"], font_size=28, bold=True,
+                    color=C_TEXT_WHITE, font_name=FONT_FAMILY_BLACK,
+                    align=PP_ALIGN.CENTER)
+        add_textbox(slide, x, metric_y + Inches(0.72), card_w, Inches(0.25),
+                    text=co["detail"], font_size=9,
+                    color=C_SUB_DARK, align=PP_ALIGN.CENTER)
+
+        # 하단 결과 영역 (그레이 배경)
+        result_y = metric_y + metric_h
+        add_rect(slide, x, result_y, card_w, result_h,
                  fill_color=C_BOX_BG, border_color=C_DARK_BG)
-
-        # 기업명
-        add_textbox(slide, x, card_y + SP_XS, card_w, Inches(0.35),
-                    text=co["name"], font_size=14, bold=True,
-                    color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK,
-                    align=PP_ALIGN.CENTER)
-
-        # 업종
-        add_textbox(slide, x, card_y + Inches(0.45), card_w, Inches(0.22),
-                    text=co["industry"], font_size=10,
-                    color=C_SUB_WHITE, align=PP_ALIGN.CENTER)
-
-        # 구분선
-        add_rect(slide, x + SP_LG, card_y + Inches(0.75),
-                 card_w - SP_LG * 2, Pt(0.5),
-                 fill_color=C_DARK_BG)
-
-        # 핵심 수치
-        add_textbox(slide, x, card_y + Inches(0.85), card_w, Inches(0.55),
-                    text=co["metric"], font_size=22, bold=True,
-                    color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK,
-                    align=PP_ALIGN.CENTER)
-
-        # 상세
-        add_textbox(slide, x, card_y + Inches(1.40), card_w, Inches(0.25),
-                    text=co["detail"], font_size=10,
-                    color=C_SUB_WHITE, align=PP_ALIGN.CENTER)
-
-        # 구분선 2
-        add_rect(slide, x + SP_LG, card_y + Inches(1.75),
-                 card_w - SP_LG * 2, Pt(0.5),
-                 fill_color=C_DARK_BG)
-
-        # 결과
-        add_textbox(slide, x, card_y + Inches(1.85), card_w, Inches(0.50),
+        add_textbox(slide, x, result_y + Inches(0.12), card_w, Inches(0.40),
                     text=co["result"], font_size=12, bold=True,
                     color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
@@ -356,7 +353,10 @@ def _add_flow_nodes(slide, nodes, start_x, y, node_w, node_h, arrow_w,
 
 
 def slide_03_new_normal(prs):
-    """슬라이드 3: 채용과 운영의 New Normal (화이트, 2분할 플로우)"""
+    """슬라이드 3: New Normal — 2분할 Before/After (재디자인)
+    개선: 각 패턴을 Before→After 흐름으로 재구성.
+    흐름도 노드를 크게, 취소선 노드를 시각적으로 구분.
+    사례를 흐름 아래에 컴팩트하게 배치."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
@@ -364,30 +364,35 @@ def slide_03_new_normal(prs):
 
     n = 2
     card_w = PRESETS[n]["w"]
-    card_h = Inches(2.50)
     card_y = ZONE_CONTENT_Y
 
     panels = [
         {
             "label": "패턴 1",
-            "title_l1": "퇴사·결원 발생 시",
-            "title_l2": "충원이 아니라 AI로 효율화",
-            "nodes": ["퇴사·결원", "충원", "AI 효율화"],
+            "title": "퇴사·결원 시 → 충원 대신 AI 효율화",
+            "flow": [
+                ("퇴사·결원", C_BOX_BG, C_TEXT_BLACK, False),
+                ("충원", C_BOX_BG, C_CAPTION, True),  # 취소 — 회색 텍스트
+                ("AI 효율화", C_DARK_BG, C_TEXT_WHITE, False),  # 강조
+            ],
             "cases": [
-                "Klarna 47% 감소, 인당 매출 73%↑",
-                "Block 40% 감축, 연 $600M 절감",
-                "Duolingo 외주→AI, 생산량 4~5배",
+                ("Klarna", "47% 감소, 인당 매출 73%↑"),
+                ("Block", "40% 감축, 연 $600M 절감"),
+                ("Duolingo", "외주→AI, 생산량 4~5배"),
             ]
         },
         {
             "label": "패턴 2",
-            "title_l1": "인력이 필요할 때",
-            "title_l2": "채용이 아니라 AI 생산성 증대",
-            "nodes": ["인력 필요", "채용", "AI 생산성↑"],
+            "title": "인력 필요 시 → 채용 대신 AI 생산성 증대",
+            "flow": [
+                ("인력 필요", C_BOX_BG, C_TEXT_BLACK, False),
+                ("채용", C_BOX_BG, C_CAPTION, True),  # 취소
+                ("AI 생산성↑", C_DARK_BG, C_TEXT_WHITE, False),  # 강조
+            ],
             "cases": [
-                'Shopify "AI로 불가능한 이유" 소명, 인당 매출 127%↑',
-                "Amazon 30K 감축 + AI에 $125B 투자",
-                "Klarna 마케팅팀 50% 감소, 캠페인 수 증가",
+                ("Shopify", "AI 불가 소명 의무, 인당 매출 127%↑"),
+                ("Amazon", "30K 감축 + AI에 $125B 투자"),
+                ("Klarna", "마케팅팀 50%↓, 캠페인 수↑"),
             ]
         },
     ]
@@ -395,51 +400,64 @@ def slide_03_new_normal(prs):
     for i, panel in enumerate(panels):
         x = card_x(n, i)
 
-        # 카드 배경
-        add_rect(slide, x, card_y, card_w, card_h,
-                 fill_color=C_BOX_BG, border_color=C_DARK_BG)
-
-        # 라벨
-        add_textbox(slide, x, card_y + SP_XS, card_w, Inches(0.25),
-                    text=panel["label"], font_size=12, bold=True,
-                    color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
+        # 라벨 (다크 배지)
+        badge = add_rect(slide, x, card_y, Inches(0.80), Inches(0.30),
+                         fill_color=C_DARK_BG, border_color=C_DARK_BG)
+        add_text_to_shape(badge, panel["label"], font_size=11, bold=True, color=C_TEXT_WHITE)
 
         # 제목
-        inner_left = x + SP_LG
-        inner_w = card_w - SP_LG * 2
-        add_multiline_textbox(
-            slide, inner_left, card_y + Inches(0.32), inner_w, Inches(0.50),
-            [
-                {"text": panel["title_l1"], "font_size": 14, "bold": True, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
-                {"text": panel["title_l2"], "font_size": 14, "bold": True, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
-            ]
-        )
+        add_textbox(slide, x + Inches(0.90), card_y, card_w - Inches(0.90), Inches(0.30),
+                    text=panel["title"], font_size=13, bold=True,
+                    color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
 
-        # 흐름도 노드
-        node_w = Inches(1.00)
-        node_h = FLOW_NODE_H
-        flow_y = card_y + Inches(0.95)
-        flow_x = x + SP_SM
-        _add_flow_nodes(slide, panel["nodes"], flow_x, flow_y,
-                        node_w, node_h, FLOW_ARROW_W,
-                        C_WHITE_BG, C_DARK_BG, C_TEXT_BLACK)
+        # 흐름도 — 넓은 노드
+        flow_y = card_y + Inches(0.50)
+        node_w = Inches(1.10)
+        node_h = Inches(0.48)
+        arrow_w = Inches(0.25)
+        fx = x
 
-        # 사례
-        case_y = card_y + Inches(1.50)
-        case_lines = []
-        for case in panel["cases"]:
-            # 첫 단어 bold
-            parts = case.split(" ", 1)
-            case_lines.append({"text": case, "font_size": 10, "bold": False,
-                               "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT})
-        add_multiline_textbox(
-            slide, inner_left, case_y, inner_w, Inches(0.90), case_lines
-        )
+        for j, (text, fill, tc, is_cancelled) in enumerate(panel["flow"]):
+            if j > 0:
+                add_textbox(slide, fx, flow_y, arrow_w, node_h,
+                            text="→", font_size=16, bold=True,
+                            color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+                fx += arrow_w
+
+            box = add_rect(slide, fx, flow_y, node_w, node_h,
+                           fill_color=fill, border_color=C_DARK_BG)
+            fs = 12 if not is_cancelled else 11
+            add_text_to_shape(box, text, font_size=fs, bold=(not is_cancelled), color=tc)
+
+            # 취소 표시 — 가로선
+            if is_cancelled:
+                line_y = flow_y + node_h / 2
+                add_rect(slide, fx + SP_SM, line_y, node_w - SP_SM * 2, Pt(1.5),
+                         fill_color=C_ACCENT)
+            fx += node_w
+
+        # 사례 — 기업명 Bold + 수치
+        case_y = card_y + Inches(1.20)
+        for company, detail in panel["cases"]:
+            txBox = slide.shapes.add_textbox(x + SP_SM, case_y, card_w - SP_SM * 2, Inches(0.22))
+            tf = txBox.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            r1 = p.add_run()
+            r1.text = f"{company}  "
+            r1.font.size = Pt(10)
+            r1.font.bold = True
+            r1.font.color.rgb = C_TEXT_BLACK
+            r1.font.name = FONT_FAMILY
+            r2 = p.add_run()
+            r2.text = detail
+            r2.font.size = Pt(10)
+            r2.font.color.rgb = C_TEXT_BLACK
+            r2.font.name = FONT_FAMILY
+            case_y += Inches(0.25)
 
     # 하단 결과 바
-    bar_y = Inches(4.35)
-    bar_h = Inches(0.40)
-    bar = add_rect(slide, MARGIN_LEFT, bar_y, CONTENT_W, bar_h,
+    bar = add_rect(slide, MARGIN_LEFT, Inches(4.35), CONTENT_W, Inches(0.40),
                    fill_color=C_DARK_BG, border_color=C_DARK_BG)
     add_text_to_shape(bar,
         "결과: 남은 인력 → 더 높은 급여 (Klarna 60%↑) + 더 높은 인당 생산성 + 더 높은 가치의 업무",
@@ -565,95 +583,97 @@ def slide_05_disruption(prs):
 
 
 def slide_06_current_state(prs):
-    """슬라이드 6: day1company 현황 (화이트, 2분할)"""
+    """슬라이드 6: day1company 현황 (재디자인)
+    개선: 좌측 가로 막대를 실제 비례 길이로, 시간 수치를 막대 끝에 배치.
+    우측 매트릭스를 축 라벨 추가하여 의미 명확화. 하단 요약을 전폭 배너로."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
     add_white_title(slide, "매출이 성장하면 인건비도 비례하여 증가하는 구조")
 
-    # 좌측: 월간 반복 업무 시간
+    # ── 좌측: 월간 반복 업무 시간 ──
     left_x = MARGIN_LEFT
-    left_w = Inches(4.20)
-    add_textbox(slide, left_x, ZONE_CONTENT_Y, left_w, Inches(0.30),
-                text="월간 반복 업무 시간", font_size=15, bold=True,
+    left_w = Inches(4.40)
+    add_textbox(slide, left_x, ZONE_CONTENT_Y, left_w, Inches(0.25),
+                text="월간 반복 업무 시간", font_size=14, bold=True,
                 color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK)
 
+    # 시간 기준 최대값 32h → 최대 막대 폭
+    max_bar_w = Inches(3.40)
     tasks = [
-        ("매출 정산", "~32h (4일)", Inches(2.80)),
-        ("비용 정산", "~24h (3일)", Inches(2.10)),
-        ("보고·집계", "수시간~수일/부서", Inches(1.80)),
-        ("데이터 가공", "전 부서 공통", Inches(1.50)),
+        ("매출 정산", "~32h", 32),
+        ("비용 정산", "~24h", 24),
+        ("보고·집계", "수시간~수일", 16),
+        ("데이터 가공", "전 부서 공통", 12),
     ]
 
-    bar_y = Inches(2.05)
-    bar_h = Inches(0.38)
-    bar_gap = Inches(0.10)
+    bar_y = Inches(2.00)
+    bar_h = Inches(0.42)
+    bar_gap = Inches(0.08)
+    label_w = Inches(1.00)
 
-    for i, (name, time, bar_w) in enumerate(tasks):
+    for i, (name, time_str, hours) in enumerate(tasks):
         y = bar_y + i * (bar_h + bar_gap)
+        bar_w_actual = max_bar_w * (hours / 32)
 
-        # 막대
-        add_rect(slide, left_x, y, bar_w, bar_h,
-                 fill_color=C_BOX_BG, border_color=C_DARK_BG)
-
-        # 이름
-        add_textbox(slide, left_x + SP_SM, y, bar_w - SP_SM, bar_h,
-                    text=name, font_size=12, bold=True,
+        # 라벨 (좌측)
+        add_textbox(slide, left_x, y, label_w, bar_h,
+                    text=name, font_size=11, bold=True,
                     color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
 
-        # 시간
-        add_textbox(slide, bar_w + SP_MD, y, Inches(2.00), bar_h,
-                    text=time, font_size=12,
-                    color=C_SUB_WHITE, align=PP_ALIGN.LEFT)
+        # 막대 (비례 길이)
+        bar_x = left_x + label_w + SP_SM
+        fill = C_DARK_BG if i == 0 else C_BOX_BG
+        tc = C_TEXT_WHITE if i == 0 else C_TEXT_BLACK
+        bar = add_rect(slide, bar_x, y, bar_w_actual, bar_h,
+                       fill_color=fill, border_color=C_DARK_BG)
 
-    # 좌측 하단 요약
-    summary_box = add_rect(slide, left_x, Inches(3.85), left_w, Inches(0.60),
-                           fill_color=C_DARK_BG, border_color=C_DARK_BG)
-    add_multiline_textbox(
-        slide, Inches(0.85), Inches(3.90), Inches(3.90), Inches(0.50),
-        [
-            {"text": "7개 사업부문", "font_size": 12, "bold": True,
-             "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
-            {"text": "인당 매출 2.34억 원 (25년 연말 기준)", "font_size": 12,
-             "bold": False, "color": C_TEXT_WHITE, "align": PP_ALIGN.LEFT},
-        ]
-    )
+        # 시간 (막대 내부 우측)
+        add_textbox(slide, bar_x + bar_w_actual - Inches(0.90), y, Inches(0.85), bar_h,
+                    text=time_str, font_size=11, bold=True,
+                    color=tc, align=PP_ALIGN.RIGHT)
 
-    # 우측: 곱 증가 구조
+    # ── 우측: 곱 증가 매트릭스 ──
     right_x = Inches(5.50)
-    right_w = Inches(4.20)
-    add_textbox(slide, right_x, ZONE_CONTENT_Y, right_w, Inches(0.30),
-                text="성장 시 업무량 곱 증가 구조", font_size=15, bold=True,
+    right_w = Inches(4.00)
+    add_textbox(slide, right_x, ZONE_CONTENT_Y, right_w, Inches(0.25),
+                text="성장 시 업무량 곱 증가", font_size=14, bold=True,
                 color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK)
 
-    add_textbox(slide, right_x, Inches(2.05), right_w, Inches(0.30),
-                text="사업부문 7 × 상품유형 6 = 42 조합", font_size=12,
+    # 축 라벨
+    add_textbox(slide, right_x, Inches(2.00), right_w, Inches(0.22),
+                text="사업부문 7 × 상품유형 6 = 42 조합", font_size=11,
                 bold=True, color=C_TEXT_BLACK)
 
-    # 매트릭스 그리드 (7열 × 6행)
-    cell_w = Inches(0.42)
+    # 매트릭스 (7열 × 6행) — 첫 행/첫 열을 다크로 축 표시
+    cell_w = Inches(0.44)
     cell_h = Inches(0.28)
-    cell_gap = Inches(0.04)
+    cell_gap = Inches(0.02)
     grid_x = right_x
-    grid_y = Inches(2.45)
+    grid_y = Inches(2.30)
 
     for row in range(6):
         for col in range(7):
             cx = grid_x + col * (cell_w + cell_gap)
             cy = grid_y + row * (cell_h + cell_gap)
+            # 첫 행 또는 첫 열을 다크로 — 축 느낌
+            if row == 0 or col == 0:
+                fill = C_DARK_BG
+            else:
+                fill = C_BOX_BG
             add_rect(slide, cx, cy, cell_w, cell_h,
-                     fill_color=C_BOX_BG, border_color=C_DARK_BG, border_width=Pt(0.25))
+                     fill_color=fill, border_color=C_DARK_BG, border_width=Pt(0.25))
 
-    # 그리드 설명
-    add_multiline_textbox(
-        slide, right_x, Inches(4.42), right_w, Inches(0.45),
-        [
-            {"text": "각 칸 = 정산·보고 1건", "font_size": 10,
-             "color": C_SUB_WHITE, "align": PP_ALIGN.LEFT},
-            {"text": "사업 확장 시 칸이 늘어남", "font_size": 10,
-             "color": C_SUB_WHITE, "align": PP_ALIGN.LEFT},
-        ]
-    )
+    add_textbox(slide, right_x, Inches(4.15), right_w, Inches(0.20),
+                text="각 칸 = 정산·보고 1건 → 사업 확장 시 칸이 늘어남", font_size=9,
+                color=C_CAPTION)
+
+    # ── 하단 전폭 요약 ──
+    summary = add_rect(slide, MARGIN_LEFT, Inches(4.35), CONTENT_W, Inches(0.40),
+                       fill_color=C_DARK_BG, border_color=C_DARK_BG)
+    add_text_to_shape(summary,
+        "7개 사업부문 | 인당 매출 2.34억 원 (25년 연말 기준) | 매출↑ = 인건비↑ 구조",
+        font_size=12, bold=True, color=C_TEXT_WHITE)
 
     add_insight_line(slide, "현재 구조에서는 매출이 늘면 사람도 늘어야 하는 상태")
 
@@ -809,89 +829,94 @@ def slide_08_two_layers(prs):
 
 
 def slide_09_synergy(prs):
-    """슬라이드 9: 두 Layer의 상호보완 구조 (화이트, 3단 번호 목록)"""
+    """슬라이드 9: 상호보완 구조 — 사이클 다이어그램 (재디자인)
+    개선: 텍스트 나열 → 좌측 사이클 다이어그램 + 우측 핵심 설명 3건"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
     add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능")
 
-    sections = [
-        {
-            "num": "①", "title": "Top-down + Bottom-up = 전사 변화",
-            "items": [
-                ("L1 단독", "핵심 업무 자동화, 일상 비효율 남음"),
-                ("L2 단독", "개인 효율화, 표준화 없이 전사 확산 불가"),
-                ("결합", "CAIO가 구조를 만들고, 부서가 그 위에서 AI 활용"),
-            ]
-        },
-        {
-            "num": "②", "title": "Layer 2 → Layer 1 편입 (고도화 경로)",
-            "items": [
-                ("예시", "부서 AI 광고 소재 제작(L2) → 광고비 최적화 자동화(L1)"),
-                ("예시", "부서 AI 보고서 초안(L2) → 손익 자동 산출 기반 보고서 자동 생성(L1)"),
-            ]
-        },
-        {
-            "num": "③", "title": "표준화를 통한 지식 보존",
-            "items": [
-                ("L2만", '"그 사람이 잘해서 되는 것" → 퇴사 시 유실'),
-                ("L1 편입", "사람에 의존하지 않는 시스템 → 인력 변동에도 유지"),
-            ]
-        },
+    # ── 좌측: 사이클 다이어그램 (4노드 순환) ──
+    # 노드 배치: 상-우-하-좌 시계방향
+    cycle_cx = Inches(2.80)  # 사이클 중심 x
+    cycle_cy = Inches(3.05)  # 사이클 중심 y
+    node_w = Inches(1.80)
+    node_h = Inches(0.50)
+    rx = Inches(1.30)  # 가로 반경
+    ry = Inches(0.80)  # 세로 반경
+
+    cycle_nodes = [
+        ("L1: 전사 구조 구축", C_DARK_BG, C_TEXT_WHITE),    # 상
+        ("부서별 AI 활용", C_BOX_BG, C_TEXT_BLACK),          # 우
+        ("L2: 부서 성과 발생", C_BOX_BG, C_TEXT_BLACK),      # 하
+        ("성과 → L1 편입", C_DARK_BG, C_TEXT_WHITE),         # 좌
+    ]
+    # 위치: 상, 우, 하, 좌
+    positions = [
+        (cycle_cx - node_w / 2, cycle_cy - ry - node_h / 2),           # 상
+        (cycle_cx + rx - node_w * 0.15, cycle_cy - node_h / 2),        # 우
+        (cycle_cx - node_w / 2, cycle_cy + ry - node_h / 2),           # 하
+        (cycle_cx - rx - node_w * 0.85, cycle_cy - node_h / 2),        # 좌
     ]
 
-    section_y = ZONE_CONTENT_Y
-    for sec in sections:
+    for j, ((text, fill, tc), (nx, ny)) in enumerate(zip(cycle_nodes, positions)):
+        box = add_rect(slide, nx, ny, node_w, node_h,
+                       fill_color=fill, border_color=C_DARK_BG)
+        add_text_to_shape(box, text, font_size=11, bold=True, color=tc)
+
+    # 화살표 (텍스트로 표현)
+    arrow_positions = [
+        (cycle_cx + Inches(0.60), cycle_cy - ry + Inches(0.10), "↘"),   # 상→우
+        (cycle_cx + Inches(0.60), cycle_cy + ry - Inches(0.45), "↗"),   # 우→하 (아래방향이지만 우하단)
+        (cycle_cx - Inches(0.80), cycle_cy + ry - Inches(0.45), "↙"),   # 하→좌
+        (cycle_cx - Inches(0.80), cycle_cy - ry + Inches(0.10), "↖"),   # 좌→상 (위방향)
+    ]
+    # 시계방향 화살표를 단순 텍스트로
+    add_textbox(slide, cycle_cx + Inches(0.70), cycle_cy - Inches(0.55), Inches(0.30), Inches(0.30),
+                text="→", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+    add_textbox(slide, cycle_cx + Inches(0.70), cycle_cy + Inches(0.25), Inches(0.30), Inches(0.30),
+                text="↓", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+    add_textbox(slide, cycle_cx - Inches(1.00), cycle_cy + Inches(0.25), Inches(0.30), Inches(0.30),
+                text="←", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+    add_textbox(slide, cycle_cx - Inches(1.00), cycle_cy - Inches(0.55), Inches(0.30), Inches(0.30),
+                text="↑", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+
+    # ── 우측: 핵심 설명 3건 ──
+    rx = Inches(5.80)
+    rw = Inches(3.50)
+    ry_start = ZONE_CONTENT_Y + Inches(0.10)
+
+    explanations = [
+        ("①", "Top-down + Bottom-up = 전사 변화",
+         "CAIO가 구조를 만들고,\n부서가 그 위에서 AI 활용"),
+        ("②", "L2 → L1 편입 경로",
+         "부서 AI 성과가 반복·검증되면\nL1 워크플로우에 편입"),
+        ("③", "표준화 = 지식 보존",
+         "사람 의존 → 시스템 전환\n인력 변동에도 유지"),
+    ]
+
+    ey = ry_start
+    for num, title, desc in explanations:
         # 번호
-        num_box = add_rect(slide, MARGIN_LEFT, section_y, Inches(0.32), Inches(0.28),
+        num_box = add_rect(slide, rx, ey, Inches(0.28), Inches(0.28),
                            fill_color=C_DARK_BG, border_color=C_DARK_BG)
-        add_text_to_shape(num_box, sec["num"], font_size=12, bold=True, color=C_TEXT_WHITE)
+        add_text_to_shape(num_box, num, font_size=11, bold=True, color=C_TEXT_WHITE)
 
-        # 섹션 제목
-        add_textbox(slide, Inches(1.12), section_y, Inches(8.18), Inches(0.28),
-                    text=sec["title"], font_size=14, bold=True, color=C_TEXT_BLACK)
+        add_textbox(slide, rx + Inches(0.35), ey, rw - Inches(0.35), Inches(0.25),
+                    text=title, font_size=12, bold=True, color=C_TEXT_BLACK)
 
-        item_y = section_y + Inches(0.32)
-        for label, value in sec["items"]:
-            b = label in ["결합", "L1 편입"]
-            txBox = slide.shapes.add_textbox(
-                Inches(1.12), item_y, Inches(8.18), Inches(0.20)
-            )
-            tf = txBox.text_frame
-            tf.word_wrap = True
-            p = tf.paragraphs[0]
-            r1 = p.add_run()
-            r1.text = f"{label}  "
-            r1.font.size = Pt(10)
-            r1.font.bold = True
-            r1.font.color.rgb = C_TEXT_BLACK
-            r1.font.name = FONT_FAMILY
-            r2 = p.add_run()
-            r2.text = value
-            r2.font.size = Pt(10)
-            r2.font.bold = b
-            r2.font.color.rgb = C_TEXT_BLACK
-            r2.font.name = FONT_FAMILY
-            item_y += Inches(0.22)
+        add_multiline_textbox(
+            slide, rx + Inches(0.35), ey + Inches(0.28), rw - Inches(0.35), Inches(0.45),
+            [{"text": line, "font_size": 10, "bold": False, "color": C_SUB_WHITE, "align": PP_ALIGN.LEFT}
+             for line in desc.split("\n")]
+        )
+        ey += Inches(0.85)
 
-        section_y = item_y + SP_LG
-
-    # 하단 요약 박스
-    summary = add_rect(slide, MARGIN_LEFT, Inches(4.56), CONTENT_W, Inches(0.38),
+    # 하단 요약
+    summary = add_rect(slide, MARGIN_LEFT, Inches(4.40), CONTENT_W, Inches(0.35),
                        fill_color=C_BOX_BG, border_color=C_DARK_BG)
-    txBox = slide.shapes.add_textbox(Inches(0.85), Inches(4.56), Inches(8.30), Inches(0.38))
-    tf = txBox.text_frame
-    p = tf.paragraphs[0]
-    r1 = p.add_run()
-    r1.text = "핵심: "
-    r1.font.size = Pt(11)
-    r1.font.bold = True
-    r1.font.color.rgb = C_TEXT_BLACK
-    r1.font.name = FONT_FAMILY
-    r2 = p.add_run()
-    r2.text = "L2 부서 성과 → 반복·검증 → L1 시스템 편입 = 사람에 의존하지 않는 지속 가능한 절감"
-    r2.font.size = Pt(11)
-    r2.font.color.rgb = C_TEXT_BLACK
-    r2.font.name = FONT_FAMILY
+    add_text_to_shape(summary,
+        "핵심: L2 부서 성과 → 반복·검증 → L1 시스템 편입 = 지속 가능한 절감",
+        font_size=11, bold=True, color=C_TEXT_BLACK)
 
 
 def slide_10_palantir(prs):
@@ -1163,52 +1188,95 @@ def slide_13_tech_approach(prs):
 
 
 def slide_14_candidate_map(prs):
-    """슬라이드 14: 전사 자동화 영역 전체 지도 + 후보 선별 (화이트)"""
+    """슬라이드 14: 후보 선별 — 퍼널 시각화 (재디자인)
+    개선: 3단 퍼널 (8개 전체 → 5개 탈락 → 3개 선정) + 선정 기준 4개"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
     add_white_title(slide, "8개 후보 중 실질 후보 3개 선별")
 
-    # 탈락/선정 리스트
-    add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.25),
-                text="8개 후보 → 3개 실질 후보 선별", font_size=14, bold=True, color=C_TEXT_BLACK)
-
-    eliminated = [
-        ("변동비 정산", "Revenue 선행 필요"),
-        ("손익 보고", "매출+비용 선행 필요"),
-        ("수강 현황", "운영 효율 중심"),
-        ("B2B/B2G 파이프라인", "매출 증대 중심"),
-        ("ERP 추출", "인프라"),
+    # ── 퍼널 3단 ──
+    funnel_x = MARGIN_LEFT
+    funnel_stages = [
+        {
+            "label": "전체 후보 8개",
+            "width": Inches(8.60),
+            "fill": C_BOX_BG,
+            "items": ["매출 정산", "비용 정산(강사료)", "광고비", "변동비", "손익 보고", "수강 현황", "B2B/B2G", "ERP 추출"],
+        },
+        {
+            "label": "탈락 5개",
+            "width": Inches(5.50),
+            "fill": C_BOX_BG,
+            "items": [
+                ("변동비", "Revenue 선행"),
+                ("손익 보고", "매출+비용 선행"),
+                ("수강 현황", "운영 효율"),
+                ("B2B/B2G", "매출 증대"),
+                ("ERP 추출", "인프라"),
+            ],
+        },
+        {
+            "label": "실질 후보 3개",
+            "width": Inches(3.60),
+            "fill": C_DARK_BG,
+            "items": ["A. 매출 정산", "C. 광고비 집계", "G. 인건비 정산"],
+        },
     ]
 
-    selected = ["A. 매출 정산", "C. 광고비 집계·정산", "G. 인건비 정산"]
+    stage_h = Inches(0.70)
+    stage_gap = Inches(0.15)
+    sy = ZONE_CONTENT_Y
 
-    # 탈락 항목
-    y = Inches(2.00)
-    for name, reason in eliminated:
-        box = add_rect(slide, MARGIN_LEFT, y, Inches(4.00), Inches(0.28),
-                       fill_color=C_BOX_BG, border_color=None)
-        add_text_to_shape(box, f"  {name}", font_size=11, color=C_CAPTION, align=PP_ALIGN.LEFT)
-        add_textbox(slide, Inches(4.80), y, Inches(4.00), Inches(0.28),
-                    text=reason, font_size=10, color=C_CAPTION)
-        y += Inches(0.32)
+    for si, stage in enumerate(funnel_stages):
+        # 중앙 정렬
+        sx = MARGIN_LEFT + (CONTENT_W - stage["width"]) / 2
+        tc = C_TEXT_WHITE if si == 2 else C_TEXT_BLACK
 
-    # 선정 항목
-    y += SP_LG
-    for name in selected:
-        box = add_rect(slide, MARGIN_LEFT, y, Inches(4.00), Inches(0.32),
-                       fill_color=C_DARK_BG, border_color=C_DARK_BG)
-        add_text_to_shape(box, f"  {name}", font_size=12, bold=True, color=C_TEXT_WHITE, align=PP_ALIGN.LEFT)
-        y += Inches(0.36)
+        box = add_rect(slide, sx, sy, stage["width"], stage_h,
+                       fill_color=stage["fill"], border_color=C_DARK_BG)
 
-    # 선정 기준
-    add_textbox(slide, Inches(5.50), Inches(3.60), Inches(4.00), Inches(0.25),
-                text="선정 기준", font_size=12, bold=True, color=C_TEXT_BLACK)
+        if si == 0:
+            # 1단: 8개 항목을 한 줄로
+            add_text_to_shape(box, " | ".join(stage["items"]),
+                              font_size=10, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+        elif si == 1:
+            # 2단: 탈락 항목 + 사유
+            items_text = "  |  ".join([f"{n} ({r})" for n, r in stage["items"]])
+            add_text_to_shape(box, items_text,
+                              font_size=9, color=C_CAPTION, align=PP_ALIGN.CENTER)
+        else:
+            # 3단: 선정 항목 Bold
+            add_text_to_shape(box, "  |  ".join(stage["items"]),
+                              font_size=13, bold=True, color=C_TEXT_WHITE, align=PP_ALIGN.CENTER)
+
+        # 단계 라벨 (좌측)
+        add_textbox(slide, MARGIN_LEFT, sy, Inches(1.50), stage_h,
+                    text=stage["label"], font_size=10, bold=True,
+                    color=C_TEXT_BLACK if si < 2 else C_TEXT_WHITE)
+
+        # 화살표 (단계 사이)
+        if si < 2:
+            add_textbox(slide, MARGIN_LEFT + CONTENT_W / 2 - Inches(0.15),
+                        sy + stage_h, Inches(0.30), stage_gap,
+                        text="▼", font_size=12, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+
+        sy += stage_h + stage_gap
+
+    # ── 선정 기준 4개 (하단 가로 배치) ──
     criteria = ["비용 절감 가시성", "독립 구축 가능성", "경영진 체감도", "후속 확장 기반"]
-    cy = Inches(3.90)
-    for c in criteria:
-        add_textbox(slide, Inches(5.70), cy, Inches(3.50), Inches(0.22),
-                    text=f"  {c}", font_size=11, color=C_TEXT_BLACK)
-        cy += Inches(0.24)
+    crit_y = Inches(3.80)
+    crit_w = Inches(2.05)
+    crit_h = Inches(0.42)
+
+    add_textbox(slide, MARGIN_LEFT, crit_y - Inches(0.28), CONTENT_W, Inches(0.25),
+                text="선정 기준", font_size=12, bold=True,
+                color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK)
+
+    for ci, crit in enumerate(criteria):
+        cx = MARGIN_LEFT + ci * (crit_w + SP_SM)
+        box = add_rect(slide, cx, crit_y, crit_w, crit_h,
+                       fill_color=C_BOX_BG, border_color=C_DARK_BG)
+        add_text_to_shape(box, crit, font_size=11, bold=True, color=C_TEXT_BLACK)
 
     add_insight_line(slide, "8개 후보 중 비용 절감 가시성과 독립 구축 가능성이 높은 3개 선별")
 
