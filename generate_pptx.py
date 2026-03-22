@@ -155,6 +155,30 @@ def set_slide_bg(slide, color):
     fill.fore_color.rgb = color
 
 
+def _set_run_style(run, font_size, bold, color, font_name):
+    """run에 폰트 스타일 적용"""
+    run.font.size = Pt(font_size)
+    run.font.bold = bold
+    run.font.color.rgb = color
+    run.font.name = font_name
+
+
+def _set_paragraph_text(tf, text, font_size, bold, color, font_name, align):
+    """텍스트를 paragraph에 설정. \\n이 있으면 paragraph를 분리하여 각각에 동일 스타일 적용."""
+    lines = text.split('\n') if '\n' in text else [text]
+    for i, line in enumerate(lines):
+        if i == 0:
+            p = tf.paragraphs[0]
+        else:
+            p = tf.add_paragraph()
+        p.alignment = align
+        p.space_after = Pt(0)
+        p.space_before = Pt(0)
+        run = p.add_run()
+        run.text = line
+        _set_run_style(run, font_size, bold, color, font_name)
+
+
 def add_textbox(slide, left, top, width, height, text="",
                 font_size=14, bold=False, color=C_TEXT_BLACK,
                 font_name=FONT_FAMILY, align=PP_ALIGN.LEFT,
@@ -179,16 +203,7 @@ def add_textbox(slide, left, top, width, height, text="",
     tf.word_wrap = True
     tf.auto_size = None
 
-    p = tf.paragraphs[0]
-    p.text = processed_text
-    p.alignment = align
-    run = p.runs[0] if p.runs else p.add_run()
-    if not p.runs:
-        run.text = processed_text
-    run.font.size = Pt(actual_fs)
-    run.font.bold = bold
-    run.font.color.rgb = color
-    run.font.name = font_name
+    _set_paragraph_text(tf, processed_text, actual_fs, bold, color, font_name, align)
     return txBox
 
 
@@ -236,14 +251,7 @@ def add_text_to_shape(shape, text, font_size=12, bold=False,
         processed_text = text
         actual_fs = font_size
 
-    p = tf.paragraphs[0]
-    p.text = processed_text
-    p.alignment = align
-    run = p.runs[0]
-    run.font.size = Pt(actual_fs)
-    run.font.bold = bold
-    run.font.color.rgb = color
-    run.font.name = font_name
+    _set_paragraph_text(tf, processed_text, actual_fs, bold, color, font_name, align)
     return shape
 
 
