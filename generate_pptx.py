@@ -2356,11 +2356,6 @@ def main():
     slide_08_two_layers(prs)
     slide_09_synergy(prs)
 
-    # ── 중간 제목: Part 2 후반 (검증 사례) ──
-    add_section_title(prs,
-        "글로벌 기업에서 검증된 접근",
-        "Part 2 — Layer 1과 Layer 2의 참고 사례")
-
     slide_10_palantir(prs)
     slide_11_l2_cases(prs)
     slide_12_roadmap_overview(prs)
