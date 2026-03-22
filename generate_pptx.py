@@ -836,13 +836,13 @@ def slide_09_synergy(prs):
     add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능")
 
     # ── 좌측: 사이클 다이어그램 (4노드 순환) ──
-    # 노드 배치: 상-우-하-좌 시계방향
-    cycle_cx = Inches(2.80)  # 사이클 중심 x
+    # 모든 노드가 MARGIN_LEFT(0.70") 이상에 위치하도록 배치
+    cycle_cx = Inches(3.00)  # 사이클 중심 x (우측으로 이동)
     cycle_cy = Inches(3.05)  # 사이클 중심 y
-    node_w = Inches(1.80)
-    node_h = Inches(0.50)
-    rx = Inches(1.30)  # 가로 반경
-    ry = Inches(0.80)  # 세로 반경
+    node_w = Inches(1.60)    # 폭 축소
+    node_h = Inches(0.45)
+    rx = Inches(1.20)  # 가로 반경
+    ry = Inches(0.75)  # 세로 반경
 
     cycle_nodes = [
         ("L1: 전사 구조 구축", C_DARK_BG, C_TEXT_WHITE),    # 상
@@ -850,34 +850,30 @@ def slide_09_synergy(prs):
         ("L2: 부서 성과 발생", C_BOX_BG, C_TEXT_BLACK),      # 하
         ("성과 → L1 편입", C_DARK_BG, C_TEXT_WHITE),         # 좌
     ]
-    # 위치: 상, 우, 하, 좌
+    # 위치 계산 — 좌측 노드가 MARGIN_LEFT 이상이 되도록
     positions = [
-        (cycle_cx - node_w / 2, cycle_cy - ry - node_h / 2),           # 상
-        (cycle_cx + rx - node_w * 0.15, cycle_cy - node_h / 2),        # 우
-        (cycle_cx - node_w / 2, cycle_cy + ry - node_h / 2),           # 하
-        (cycle_cx - rx - node_w * 0.85, cycle_cy - node_h / 2),        # 좌
+        (cycle_cx - node_w / 2, cycle_cy - ry - node_h / 2),              # 상 (중앙)
+        (cycle_cx + rx, cycle_cy - node_h / 2),                            # 우
+        (cycle_cx - node_w / 2, cycle_cy + ry - node_h / 2),              # 하 (중앙)
+        (cycle_cx - rx - node_w, cycle_cy - node_h / 2),                   # 좌
     ]
+    # 좌측 노드 최소 x 보정
+    left_node_x = max(MARGIN_LEFT, positions[3][0])
+    positions[3] = (left_node_x, positions[3][1])
 
     for j, ((text, fill, tc), (nx, ny)) in enumerate(zip(cycle_nodes, positions)):
         box = add_rect(slide, nx, ny, node_w, node_h,
                        fill_color=fill, border_color=C_DARK_BG)
-        add_text_to_shape(box, text, font_size=11, bold=True, color=tc)
+        add_text_to_shape(box, text, font_size=10, bold=True, color=tc)
 
-    # 화살표 (텍스트로 표현)
-    arrow_positions = [
-        (cycle_cx + Inches(0.60), cycle_cy - ry + Inches(0.10), "↘"),   # 상→우
-        (cycle_cx + Inches(0.60), cycle_cy + ry - Inches(0.45), "↗"),   # 우→하 (아래방향이지만 우하단)
-        (cycle_cx - Inches(0.80), cycle_cy + ry - Inches(0.45), "↙"),   # 하→좌
-        (cycle_cx - Inches(0.80), cycle_cy - ry + Inches(0.10), "↖"),   # 좌→상 (위방향)
-    ]
-    # 시계방향 화살표를 단순 텍스트로
-    add_textbox(slide, cycle_cx + Inches(0.70), cycle_cy - Inches(0.55), Inches(0.30), Inches(0.30),
+    # 시계방향 화살표
+    add_textbox(slide, cycle_cx + Inches(0.55), cycle_cy - Inches(0.50), Inches(0.30), Inches(0.30),
                 text="→", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx + Inches(0.70), cycle_cy + Inches(0.25), Inches(0.30), Inches(0.30),
+    add_textbox(slide, cycle_cx + Inches(0.55), cycle_cy + Inches(0.20), Inches(0.30), Inches(0.30),
                 text="↓", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx - Inches(1.00), cycle_cy + Inches(0.25), Inches(0.30), Inches(0.30),
+    add_textbox(slide, cycle_cx - Inches(0.85), cycle_cy + Inches(0.20), Inches(0.30), Inches(0.30),
                 text="←", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx - Inches(1.00), cycle_cy - Inches(0.55), Inches(0.30), Inches(0.30),
+    add_textbox(slide, cycle_cx - Inches(0.85), cycle_cy - Inches(0.50), Inches(0.30), Inches(0.30),
                 text="↑", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
     # ── 우측: 핵심 설명 3건 ──
@@ -1331,73 +1327,104 @@ def slide_15_comparison(prs):
 
 
 def slide_16_revenue_problem(prs):
-    """슬라이드 16: 매출 정산 현재 문제 상세 (화이트)"""
+    """슬라이드 16: 매출 정산 문제 (재디자인)
+    개선: 좌측에 Big Number + 프로세스 흐름(가로), 우측에 6가지 상품유형 그리드"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
     add_white_title(slide, "매출 정산을 선택할 경우, 이것이 해결해야 할 구체적인 문제")
 
-    # 좌측: 프로세스 흐름
-    steps = ["ERP 다운로드", "수작업 계산", "수작업 검증", "보고"]
-    step_w = Inches(2.00)
-    step_h = Inches(0.42)
-    step_y = Inches(1.80)
-
-    for i, step in enumerate(steps):
-        y = step_y + i * (step_h + SP_SM)
-        box = add_rect(slide, MARGIN_LEFT, y, step_w, step_h,
-                       fill_color=C_BOX_BG, border_color=C_DARK_BG)
-        add_text_to_shape(box, step, font_size=12, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
-        if i < 3:
-            add_textbox(slide, Inches(1.50), y + step_h, Inches(0.50), SP_SM,
-                        text="↓", font_size=12, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-
-    # 우측 상단: 큰 수치
-    big_box = add_rect(slide, Inches(5.50), Inches(1.80), Inches(3.80), Inches(1.00),
+    # ── 상단: Big Number (전폭) ──
+    big_box = add_rect(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.70),
                        fill_color=C_DARK_BG, border_color=C_DARK_BG)
-    add_textbox(slide, Inches(5.50), Inches(1.85), Inches(3.80), Inches(0.55),
+    add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y + Inches(0.05), Inches(4.00), Inches(0.55),
                 text="월 32시간 (4일)", font_size=28, bold=True,
                 color=C_TEXT_WHITE, font_name=FONT_FAMILY_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, Inches(5.50), Inches(2.45), Inches(3.80), Inches(0.30),
-                text="매출 정산 소요 시간", font_size=12, color=C_SUB_DARK, align=PP_ALIGN.CENTER)
+    add_textbox(slide, Inches(5.00), ZONE_CONTENT_Y + Inches(0.15), Inches(4.30), Inches(0.40),
+                text="매출 정산에 매월 소요되는 시간\n비용 정산 3일(24시간)은 별도",
+                font_size=11, color=C_SUB_DARK, align=PP_ALIGN.LEFT)
 
-    # 우측 하단: 상품유형별 차이
-    add_textbox(slide, Inches(5.50), Inches(3.10), Inches(3.80), Inches(0.25),
-                text="상품유형별 매출 인식 방식 차이", font_size=12, bold=True, color=C_TEXT_BLACK)
+    # ── 중단 좌측: 현재 프로세스 (가로 흐름) ──
+    add_textbox(slide, MARGIN_LEFT, Inches(2.55), Inches(4.20), Inches(0.22),
+                text="현재 프로세스", font_size=12, bold=True, color=C_TEXT_BLACK)
+
+    steps = ["ERP\n다운로드", "수작업\n계산", "수작업\n검증", "보고"]
+    node_w = Inches(0.90)
+    node_h = Inches(0.50)
+    arrow_w = Inches(0.25)
+    fx = MARGIN_LEFT
+    flow_y = Inches(2.82)
+
+    for j, step in enumerate(steps):
+        if j > 0:
+            add_textbox(slide, fx, flow_y, arrow_w, node_h,
+                        text="→", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+            fx += arrow_w
+        box = add_rect(slide, fx, flow_y, node_w, node_h,
+                       fill_color=C_BOX_BG, border_color=C_DARK_BG)
+        add_text_to_shape(box, step, font_size=10, bold=True, color=C_TEXT_BLACK)
+        fx += node_w
+
+    # ── 중단 우측: 6가지 상품유형 (2행×3열 그리드) ──
+    add_textbox(slide, Inches(5.30), Inches(2.55), Inches(4.00), Inches(0.22),
+                text="상품유형별 매출 인식 방식 — 6가지가 모두 다름", font_size=12, bold=True, color=C_TEXT_BLACK)
 
     types = ["단건 수강권", "구독형", "B2B 계약", "환불/부분취소", "번들 상품", "제휴/입점"]
-    ty = Inches(3.40)
-    for t in types:
-        add_rect(slide, Inches(5.50), ty, Inches(1.80), Inches(0.22),
-                 fill_color=C_BOX_BG, border_color=C_DARK_BG)
-        add_textbox(slide, Inches(5.60), ty, Inches(1.70), Inches(0.22),
-                    text=t, font_size=9, color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
-        ty += Inches(0.25)
+    type_w = Inches(1.40)
+    type_h = Inches(0.38)
+    type_gap = Inches(0.08)
+    type_x = Inches(5.30)
+    type_y = Inches(2.82)
 
-    add_insight_line(slide, "규칙이 명확하지만 수작업으로 반복하고 있는 업무 — Palantir 유형 1과 동일한 구조")
+    for ti, t in enumerate(types):
+        row = ti // 3
+        col = ti % 3
+        tx = type_x + col * (type_w + type_gap)
+        ty = type_y + row * (type_h + type_gap)
+        box = add_rect(slide, tx, ty, type_w, type_h,
+                       fill_color=C_BOX_BG, border_color=C_DARK_BG)
+        add_text_to_shape(box, t, font_size=10, bold=True, color=C_TEXT_BLACK)
+
+    # ── 하단: 핵심 문제 요약 ──
+    summary = add_rect(slide, MARGIN_LEFT, Inches(4.00), CONTENT_W, Inches(0.50),
+                       fill_color=C_BOX_BG, border_color=C_DARK_BG)
+    add_multiline_textbox(
+        slide, MARGIN_LEFT + SP_LG, Inches(4.02), CONTENT_W - SP_LG * 2, Inches(0.46),
+        [
+            {"text": "규칙이 명확하지만 수작업으로 반복 — 6가지 상품유형 × 7개 사업부문 = 42가지 조합을 수동 처리",
+             "font_size": 11, "bold": False, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
+            {"text": "Palantir 유형 1(수작업 자동화)과 동일한 구조",
+             "font_size": 11, "bold": True, "color": C_TEXT_BLACK, "align": PP_ALIGN.LEFT},
+        ]
+    )
+
+    add_insight_line(slide, "규칙이 명확하지만 수작업으로 반복 — Palantir 유형 1과 동일한 구조")
 
 
 def slide_17_execution_plan(prs):
-    """슬라이드 17: 2개월 실행 계획 (화이트, 간트 스타일)"""
+    """슬라이드 17: 2개월 실행 계획 (재수정 — 캔버스 내 맞춤)
+    수정: 라벨+4열이 content_width(8.60") 내에 수용되도록 열 폭 조정"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
     add_white_title(slide, "2개월 안에 3개 영역을 완성한다")
 
-    # 헤더: 4주 구간
-    periods = ["Week 1~2", "Week 3~4", "Week 5~6", "Week 7~8"]
-    col_w = Inches(2.00)
-    col_gap = Inches(0.10)
-    header_y = ZONE_CONTENT_Y
-    header_h = Inches(0.30)
+    # 레이아웃 계산: 라벨(0.90") + 4열 = content_width(8.60") 내
+    label_w = Inches(0.90)
+    label_gap = SP_XS  # 0.08"
+    grid_x = MARGIN_LEFT + label_w + label_gap
+    available_w = Inches(8.60) - label_w - label_gap  # 7.62"
+    col_gap = SP_XS  # 0.08"
+    col_w = (available_w - 3 * col_gap) / 4  # ~1.845"
 
-    label_w = Inches(1.00)
-    grid_x = MARGIN_LEFT + label_w + SP_SM
+    periods = ["Week 1~2", "Week 3~4", "Week 5~6", "Week 7~8"]
+    header_y = ZONE_CONTENT_Y
+    header_h = Inches(0.28)
 
     for i, period in enumerate(periods):
         x = grid_x + i * (col_w + col_gap)
-        box = add_rect(slide, x, header_y, col_w, header_h, fill_color=C_DARK_BG, border_color=C_DARK_BG)
+        box = add_rect(slide, x, header_y, col_w, header_h,
+                       fill_color=C_DARK_BG, border_color=C_DARK_BG)
         add_text_to_shape(box, period, font_size=10, bold=True, color=C_TEXT_WHITE)
 
-    # 행: 매출 정산 / 강사료 / 광고비
     rows_data = [
         {"label": "매출 정산", "cells": ["첫 작동 데모", "주력 사업부문\n완성", "전체 완성\n+ 병행 운영", "고도화"]},
         {"label": "강사료", "cells": [None, None, "설계 + 완성", "고도화"]},
@@ -1405,12 +1432,11 @@ def slide_17_execution_plan(prs):
     ]
 
     row_h = Inches(0.55)
-    row_gap = Inches(0.08)
+    row_gap = SP_XS
 
     for ri, row in enumerate(rows_data):
         ry = header_y + header_h + SP_SM + ri * (row_h + row_gap)
 
-        # 라벨
         add_textbox(slide, MARGIN_LEFT, ry, label_w, row_h,
                     text=row["label"], font_size=10, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
 
@@ -1420,7 +1446,8 @@ def slide_17_execution_plan(prs):
             cx = grid_x + ci * (col_w + col_gap)
             fill = C_DARK_BG if (ri == 0 and ci == 0) else C_BOX_BG
             tc = C_TEXT_WHITE if (ri == 0 and ci == 0) else C_TEXT_BLACK
-            box = add_rect(slide, cx, ry, col_w, row_h, fill_color=fill, border_color=C_DARK_BG)
+            box = add_rect(slide, cx, ry, col_w, row_h,
+                           fill_color=fill, border_color=C_DARK_BG)
             add_text_to_shape(box, cell, font_size=10, bold=False, color=tc)
 
     add_insight_line(slide, "먼저 완성하고 결과를 보여준 뒤, 쓰면서 고도화")
