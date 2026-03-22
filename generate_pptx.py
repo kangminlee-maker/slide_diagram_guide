@@ -83,7 +83,7 @@ def set_slide_bg(slide, color):
 def add_textbox(slide, left, top, width, height, text="",
                 font_size=14, bold=False, color=C_TEXT_BLACK,
                 font_name=FONT_FAMILY, align=PP_ALIGN.LEFT,
-                anchor=MSO_ANCHOR.MIDDLE):
+                anchor=MSO_ANCHOR.TOP):
     """텍스트 박스 추가"""
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
@@ -129,7 +129,7 @@ def add_rect(slide, left, top, width, height,
 
 def add_text_to_shape(shape, text, font_size=12, bold=False,
                       color=C_TEXT_BLACK, font_name=FONT_FAMILY,
-                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE):
+                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP):
     """도형 내부에 텍스트 설정"""
     tf = shape.text_frame
     tf.word_wrap = True
@@ -151,7 +151,7 @@ def add_text_to_shape(shape, text, font_size=12, bold=False,
 
 
 def add_multiline_textbox(slide, left, top, width, height, lines,
-                          anchor=MSO_ANCHOR.MIDDLE):
+                          anchor=MSO_ANCHOR.TOP):
     """여러 줄 텍스트 박스 (각 줄에 font_size, bold, color 지정)
     lines: list of dict {"text", "font_size", "bold", "color", "font_name", "align"}
     """
@@ -213,7 +213,7 @@ def add_white_title(slide, text):
         slide, MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, ZONE_TITLE_H,
         text=text, font_size=22, bold=True, color=C_TEXT_BLACK,
         font_name=FONT_FAMILY_BLACK, align=PP_ALIGN.LEFT,
-        anchor=MSO_ANCHOR.MIDDLE
+        anchor=MSO_ANCHOR.TOP
     )
 
 
@@ -1982,7 +1982,7 @@ def slide_31_decision(prs):
     banner = add_rect(slide, MARGIN_LEFT, Inches(4.20), CONTENT_W, Inches(0.40),
                       fill_color=C_DARK_BG, border_color=C_DARK_BG)
     add_text_to_shape(banner,
-        "Layer 1은 2개월 안에 결과를 보여드립니다. Layer 2는 제도로 조직이 스스로 움직이게 합니다.",
+        "Layer 1은 2개월 안에 결과를 보여준다 — Layer 2는 제도로 조직이 스스로 움직이게 한다",
         font_size=12, bold=True, color=C_TEXT_WHITE)
 
     add_insight_line(slide, "오늘 승인하시면, 내일부터 실행합니다")
