@@ -379,6 +379,23 @@ def card_x(n, idx):
 
 # ── 슬라이드 생성 함수 ────────────────────────
 
+def add_section_title(prs, title, subtitle=None):
+    """중간 제목 슬라이드 (다크 배경) — Part 전환점"""
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    set_slide_bg(slide, C_DARK_BG)
+
+    add_textbox(slide, MARGIN_LEFT, Inches(1.80), CONTENT_W, Inches(1.20),
+                text=title, font_size=28, bold=True,
+                color=C_TEXT_WHITE, font_name=FONT_FAMILY_BLACK,
+                align=PP_ALIGN.LEFT)
+
+    if subtitle:
+        add_textbox(slide, MARGIN_LEFT, Inches(3.20), CONTENT_W, Inches(0.40),
+                    text=subtitle, font_size=14,
+                    color=C_SUB_DARK, font_name=FONT_FAMILY,
+                    align=PP_ALIGN.LEFT)
+
+
 def slide_01_cover(prs):
     """슬라이드 1: 표지 (다크)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])  # blank
@@ -2289,23 +2306,43 @@ def main():
     prs.slide_width = CANVAS_W
     prs.slide_height = CANVAS_H
 
-    # Part 1: AI 시대, 비용 구조가 바뀌고 있다 (1~7)
+    # Part 1: AI 시대, 비용 구조가 바뀌고 있다
     slide_01_cover(prs)
     slide_02_global_cases(prs)
     slide_03_new_normal(prs)
     slide_04_agenda(prs)
+
+    # ── 중간 제목: Part 1 후반 (위기감) ──
+    add_section_title(prs,
+        "AI 시대, 비용 구조가\n바뀌고 있다",
+        "Part 1 — 우리에게도 해당되는 변화")
+
     slide_05_disruption(prs)
     slide_06_current_state(prs)
     slide_07_before_after(prs)
 
-    # Part 2: AI 전환 전략 프레임워크 (8~12)
+    # ── 중간 제목: Part 2 (전략 프레임워크) ──
+    add_section_title(prs,
+        "AI 전환 전략\n프레임워크",
+        "Part 2 — 두 가지 Layer로 구성된 전략")
+
     slide_08_two_layers(prs)
     slide_09_synergy(prs)
+
+    # ── 중간 제목: Part 2 후반 (검증 사례) ──
+    add_section_title(prs,
+        "글로벌 기업에서\n검증된 접근",
+        "Part 2 — Layer 1과 Layer 2의 참고 사례")
+
     slide_10_palantir(prs)
     slide_11_l2_cases(prs)
     slide_12_roadmap_overview(prs)
 
-    # Part 3: Layer 1 — 첫 프로젝트 선정과 실행 (13~18)
+    # ── 중간 제목: Part 3 (Layer 1 상세) ──
+    add_section_title(prs,
+        "Layer 1 — 구조화 자동화\n첫 프로젝트와 실행",
+        "Part 3 — 무엇을, 언제까지, 어떻게")
+
     slide_13_tech_approach(prs)
     slide_14_candidate_map(prs)
     slide_15_comparison(prs)
@@ -2313,31 +2350,44 @@ def main():
     slide_17_execution_plan(prs)
     slide_18_success_metrics(prs)
 
-    # Part 4: Layer 2 — 전사 AI 활용 제도 설계 (19~23)
+    # ── 중간 제목: Part 4 (Layer 2 제도) ──
+    add_section_title(prs,
+        "Layer 2 — AI 도구 활용\n제도 설계",
+        "Part 4 — 진입 차단 → 목표 부여 → 경쟁 유도 → 지속 운영")
+
     slide_19_why_policy(prs)
     slide_20_policy1(prs)
     slide_21_policy2(prs)
     slide_22_policy3(prs)
     slide_23_policy4(prs)
 
-    # Part 5: 통합 로드맵과 기대 효과 (24~26)
+    # ── 중간 제목: Part 5 (통합) ──
+    add_section_title(prs,
+        "통합 로드맵과\n기대 효과",
+        "Part 5 — 두 Layer를 합치면")
+
     slide_24_integrated_timeline(prs)
     slide_25_expected_effects(prs)
     slide_26_caio_role(prs)
 
-    # Part 6: 예상 리스크와 대응 설계 (27~29)
+    # ── 중간 제목: Part 6 (리스크) ──
+    add_section_title(prs,
+        "예상 리스크와\n대응 설계",
+        "Part 6 — 초기 → 안정기 → 장기")
+
     slide_27_risk_early(prs)
     slide_28_risk_mid(prs)
     slide_29_risk_long(prs)
 
-    # Part 7: 의사결정 요청 + Q&A (30~32)
+    # Part 7: 의사결정 요청 + Q&A
     slide_30_summary(prs)
     slide_31_decision(prs)
     slide_32_closing(prs)
 
+    total = len(prs.slides)
     output_path = "/Users/kangmin/cowork/slide_diagram_guide/output_full.pptx"
     prs.save(output_path)
-    print(f"Full deck (32 slides) saved to: {output_path}")
+    print(f"Full deck ({total} slides) saved to: {output_path}")
 
 
 if __name__ == "__main__":
