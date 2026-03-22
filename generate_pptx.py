@@ -158,10 +158,21 @@ def set_slide_bg(slide, color):
 def add_textbox(slide, left, top, width, height, text="",
                 font_size=14, bold=False, color=C_TEXT_BLACK,
                 font_name=FONT_FAMILY, align=PP_ALIGN.LEFT,
-                anchor=MSO_ANCHOR.TOP):
-    """텍스트 박스 추가 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
-    box_w = width / 914400  # EMU to inches
-    processed_text = semantic_line_break(text, box_w, font_size, bold) if text else text
+                anchor=MSO_ANCHOR.TOP, fixed_size=False):
+    """텍스트 박스 추가.
+    fixed_size=True: 폰트 크기 고정 + 의미 단위 줄바꿈 (헤드라인, 중제목 등)
+    fixed_size=False: 폰트 축소 허용 (본문, 보조 텍스트)"""
+    box_w = width / 914400
+    if text:
+        if fixed_size:
+            processed_text = semantic_line_break(text, box_w, font_size, bold)
+            actual_fs = font_size
+        else:
+            processed_text = text
+            actual_fs = fit_font_size(text, box_w, font_size, bold)
+    else:
+        processed_text = text
+        actual_fs = font_size
 
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
@@ -174,7 +185,7 @@ def add_textbox(slide, left, top, width, height, text="",
     run = p.runs[0] if p.runs else p.add_run()
     if not p.runs:
         run.text = processed_text
-    run.font.size = Pt(font_size)
+    run.font.size = Pt(actual_fs)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -202,21 +213,34 @@ def add_rect(slide, left, top, width, height,
 
 def add_text_to_shape(shape, text, font_size=12, bold=False,
                       color=C_TEXT_BLACK, font_name=FONT_FAMILY,
-                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP):
-    """도형 내부에 텍스트 설정 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
+                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP,
+                      fixed_size=False):
+    """도형 내부에 텍스트 설정.
+    fixed_size=True: 폰트 고정 + 의미 줄바꿈 (중제목 등)
+    fixed_size=False: 폰트 축소 허용 (본문, 카드 내부 등)"""
     tf = shape.text_frame
     tf.word_wrap = True
     tf.auto_size = None
 
     box_w = shape.width / 914400
     usable_w = max(box_w - 0.15, 0.3)
-    processed_text = semantic_line_break(text, usable_w, font_size, bold) if text else text
+
+    if text:
+        if fixed_size:
+            processed_text = semantic_line_break(text, usable_w, font_size, bold)
+            actual_fs = font_size
+        else:
+            processed_text = text
+            actual_fs = fit_font_size(text, usable_w, font_size, bold)
+    else:
+        processed_text = text
+        actual_fs = font_size
 
     p = tf.paragraphs[0]
     p.text = processed_text
     p.alignment = align
     run = p.runs[0]
-    run.font.size = Pt(font_size)
+    run.font.size = Pt(actual_fs)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -224,8 +248,10 @@ def add_text_to_shape(shape, text, font_size=12, bold=False,
 
 
 def add_multiline_textbox(slide, left, top, width, height, lines,
-                          anchor=MSO_ANCHOR.TOP):
-    """여러 줄 텍스트 박스 (의미 단위 줄바꿈 적용, 폰트 크기 유지)"""
+                          anchor=MSO_ANCHOR.TOP, fixed_size=False):
+    """여러 줄 텍스트 박스.
+    fixed_size=True: 폰트 고정 + 의미 줄바꿈
+    fixed_size=False: 폰트 축소 허용"""
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.word_wrap = True
@@ -242,8 +268,16 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
         fs = line.get("font_size", 14)
         bold = line.get("bold", False)
 
-        # 의미 단위 줄바꿈 (폰트 크기는 유지)
-        processed = semantic_line_break(text, box_w, fs, bold) if text else text
+        if text:
+            if fixed_size:
+                processed = semantic_line_break(text, box_w, fs, bold)
+                actual_fs = fs
+            else:
+                processed = text
+                actual_fs = fit_font_size(text, box_w, fs, bold)
+        else:
+            processed = text
+            actual_fs = fs
 
         p.text = processed
         p.alignment = line.get("align", PP_ALIGN.LEFT)
@@ -254,7 +288,7 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
         else:
             run = p.add_run()
             run.text = processed
-        run.font.size = Pt(fs)
+        run.font.size = Pt(actual_fs)
         run.font.bold = bold
         run.font.color.rgb = line.get("color", C_TEXT_BLACK)
         run.font.name = line.get("font_name", FONT_FAMILY)
@@ -307,12 +341,12 @@ def add_insight_line(slide, text):
 
 
 def add_white_title(slide, text):
-    """화이트 슬라이드 제목 (zones.title)"""
+    """화이트 슬라이드 제목 (zones.title) — 22pt 고정, 의미 줄바꿈"""
     add_textbox(
         slide, MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, ZONE_TITLE_H,
         text=text, font_size=22, bold=True, color=C_TEXT_BLACK,
         font_name=FONT_FAMILY_BLACK, align=PP_ALIGN.LEFT,
-        anchor=MSO_ANCHOR.TOP
+        anchor=MSO_ANCHOR.TOP, fixed_size=True
     )
 
 
