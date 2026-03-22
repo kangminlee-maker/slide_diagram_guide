@@ -328,7 +328,7 @@ def slide_02_global_cases(prs):
                     text=co["result"], font_size=12, bold=True,
                     color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
-    add_insight_line(slide, "이 기업들은 AI를 '도입'한 것이 아니라, 인력 비용 구조 자체를 AI 기반으로 전환했다")
+    add_insight_line(slide, "이 기업들은 AI를 '도입'한 것이 아니라, 인력 비용 구조 자체를 AI 기반으로 전환")
 
 
 def _add_flow_nodes(slide, nodes, start_x, y, node_w, node_h, arrow_w,
@@ -561,7 +561,7 @@ def slide_05_disruption(prs):
         ]
     )
 
-    add_insight_line(slide, "업무 방식을 바꾸는 것이 경쟁력을 지키는 유일한 방법이다")
+    add_insight_line(slide, "업무 방식을 바꾸는 것이 경쟁력을 지키는 유일한 방법")
 
 
 def slide_06_current_state(prs):
@@ -655,7 +655,7 @@ def slide_06_current_state(prs):
         ]
     )
 
-    add_insight_line(slide, "현재 구조에서는 매출이 늘면 사람도 늘어야 한다")
+    add_insight_line(slide, "현재 구조에서는 매출이 늘면 사람도 늘어야 하는 상태")
 
 
 def slide_07_before_after(prs):
@@ -736,7 +736,7 @@ def slide_07_before_after(prs):
         ]
     )
 
-    add_insight_line(slide, "글로벌 기업 대비 보수적인 목표이다 — 구체적인 실행 방법을 지금부터 설명한다")
+    add_insight_line(slide, "글로벌 기업 대비 보수적인 목표 — 구체적인 실행 방법을 지금부터 설명")
 
 
 # ══════════════════════════════════════════════════
@@ -805,7 +805,7 @@ def slide_08_two_layers(prs):
                 text="상호보완", font_size=9, bold=True,
                 color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
-    add_insight_line(slide, "CAIO의 Top-down 구축과 각 부서의 Bottom-up 활용이 함께 이루어져야 한다")
+    add_insight_line(slide, "CAIO의 Top-down 구축과 각 부서의 Bottom-up 활용이 함께 이루어져야 하는 구조")
 
 
 def slide_09_synergy(prs):
@@ -1100,7 +1100,7 @@ def slide_12_roadmap_overview(prs):
                 text="▲ L2 성과 → L1 편입", font_size=8, bold=True,
                 color=C_TEXT_BLACK, align=PP_ALIGN.LEFT)
 
-    add_insight_line(slide, "오늘 승인하시면 Layer 1은 내일부터 착수, Layer 2 제도는 즉시 시행한다")
+    add_insight_line(slide, "오늘 승인 시 Layer 1은 내일부터 착수, Layer 2 제도는 즉시 시행")
 
 
 # ══════════════════════════════════════════════════
@@ -1159,7 +1159,7 @@ def slide_13_tech_approach(prs):
                 text="Master Data를 첫 2주 안에 안정화 → 이후 프로젝트에서 재활용", font_size=10,
                 color=C_SUB_WHITE)
 
-    add_insight_line(slide, "검증된 아키텍처 위에 빠르게 구축하고, 결과를 바로 확인한다")
+    add_insight_line(slide, "검증된 아키텍처 위에 빠르게 구축, 결과를 바로 확인")
 
 
 def slide_14_candidate_map(prs):
@@ -1210,7 +1210,7 @@ def slide_14_candidate_map(prs):
                     text=f"  {c}", font_size=11, color=C_TEXT_BLACK)
         cy += Inches(0.24)
 
-    add_insight_line(slide, "8개 후보 중 비용 절감 가시성과 독립 구축 가능성이 높은 3개를 선별했다")
+    add_insight_line(slide, "8개 후보 중 비용 절감 가시성과 독립 구축 가능성이 높은 3개 선별")
 
 
 def slide_15_comparison(prs):
@@ -1259,7 +1259,7 @@ def slide_15_comparison(prs):
     add_text_to_shape(banner, "CAIO 권고: 매출 정산 자동화 — 현재 확보된 데이터 기준으로 가장 빠르고 확실한 선택",
                       font_size=12, bold=True, color=C_TEXT_WHITE)
 
-    add_insight_line(slide, "최종 결정은 경영진의 판단 사항입니다")
+    add_insight_line(slide, "최종 결정은 경영진의 판단 사항")
 
 
 def slide_16_revenue_problem(prs):
@@ -1355,7 +1355,7 @@ def slide_17_execution_plan(prs):
             box = add_rect(slide, cx, ry, col_w, row_h, fill_color=fill, border_color=C_DARK_BG)
             add_text_to_shape(box, cell, font_size=10, bold=False, color=tc)
 
-    add_insight_line(slide, "먼저 완성하고 결과를 보여준 뒤, 쓰면서 고도화한다")
+    add_insight_line(slide, "먼저 완성하고 결과를 보여준 뒤, 쓰면서 고도화")
 
 
 def slide_18_success_metrics(prs):
@@ -1413,7 +1413,7 @@ def slide_18_success_metrics(prs):
         )
         ry += Inches(0.65)
 
-    add_insight_line(slide, "사전에 방어선을 설계하고, 결과를 빠르게 보여주는 것이 최선의 대응이다")
+    add_insight_line(slide, "사전에 방어선을 설계하고, 결과를 빠르게 보여주는 것이 최선의 대응")
 
 
 # ══════════════════════════════════════════════════
@@ -1458,7 +1458,7 @@ def slide_19_why_policy(prs):
 
         y += Inches(0.85)
 
-    add_insight_line(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질이다")
+    add_insight_line(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질")
 
 
 def slide_20_policy1(prs):
@@ -1507,7 +1507,7 @@ def slide_20_policy1(prs):
                     text=d, font_size=10, color=C_TEXT_BLACK)
         dy += Inches(0.28)
 
-    add_insight_line(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값이 된다")
+    add_insight_line(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값")
 
 
 def slide_21_policy2(prs):
@@ -1539,7 +1539,7 @@ def slide_21_policy2(prs):
                 text='설계 원리: "안 해도 되는 것" → "하지 않으면 불이익"',
                 font_size=11, bold=True, color=C_TEXT_BLACK)
 
-    add_insight_line(slide, "AI 활용이 선택이 아닌 필수가 된다")
+    add_insight_line(slide, "AI 활용이 선택이 아닌 필수")
 
 
 def slide_22_policy3(prs):
@@ -1586,7 +1586,7 @@ def slide_22_policy3(prs):
                     text=c, font_size=11, color=C_TEXT_BLACK)
         cy += Inches(0.26)
 
-    add_insight_line(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라오거나 평가에서 뒤처진다")
+    add_insight_line(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라오거나 평가에서 뒤처지는 구조")
 
 
 def slide_23_policy4(prs):
@@ -1624,7 +1624,7 @@ def slide_23_policy4(prs):
                 text="챔피언이 발굴 → CAIO에 전달 → L1 편입 검토", font_size=11, bold=True,
                 color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
-    add_insight_line(slide, "챔피언이 부서의 변화를 이끌고, Layer 1과의 연결점이 된다")
+    add_insight_line(slide, "챔피언이 부서의 변화를 이끌고, Layer 1과의 연결점")
 
 
 # ══════════════════════════════════════════════════
@@ -1677,7 +1677,7 @@ def slide_24_integrated_timeline(prs):
              for line in p["l2"].split("\n")]
         )
 
-    add_insight_line(slide, "두 Layer가 합류하면서 상호 강화한다")
+    add_insight_line(slide, "두 Layer가 합류하면서 상호 강화")
 
 
 def slide_25_expected_effects(prs):
@@ -1731,7 +1731,7 @@ def slide_25_expected_effects(prs):
                 text="Klarna 73%↑ / Shopify 127%↑ 대비 보수적 목표", font_size=10,
                 color=C_SUB_DARK, align=PP_ALIGN.CENTER)
 
-    add_insight_line(slide, "인당 매출 3억 원은 달성 가능한 목표이다")
+    add_insight_line(slide, "인당 매출 3억 원은 달성 가능한 목표")
 
 
 def slide_26_caio_role(prs):
@@ -1791,7 +1791,7 @@ def slide_26_caio_role(prs):
         r2.font.name = FONT_FAMILY
         py += Inches(0.50)
 
-    add_insight_line(slide, "CAIO가 모든 것을 직접 하는 것이 아니라, 구조를 설계하고 조직이 성장하게 한다")
+    add_insight_line(slide, "CAIO가 모든 것을 직접 하는 것이 아니라, 구조를 설계하고 조직이 성장하는 구조")
 
 
 # ══════════════════════════════════════════════════
@@ -1846,7 +1846,7 @@ def slide_27_risk_early(prs):
     _risk_table_slide(prs,
         "초기 리스크의 핵심은 '불신'과 '거부'이다",
         "Month 1~2", C_ACCENT, risks,
-        "불신과 거부 — 결과를 빠르게 보여주는 것이 최선의 대응이다")
+        "불신과 거부 — 결과를 빠르게 보여주는 것이 최선의 대응")
 
 
 def slide_28_risk_mid(prs):
@@ -1861,7 +1861,7 @@ def slide_28_risk_mid(prs):
     _risk_table_slide(prs,
         "형식화와 양극화 — 동일 직무 경쟁 평가제가 대응한다",
         "Month 3~6", RGBColor(0xCC, 0x99, 0x00), risks,
-        "형식화와 양극화 — 동일 직무 경쟁 평가제가 두 가지 모두에 대응한다")
+        "형식화와 양극화 — 동일 직무 경쟁 평가제가 두 가지 모두에 대응")
 
 
 def slide_29_risk_long(prs):
@@ -1875,7 +1875,7 @@ def slide_29_risk_long(prs):
     _risk_table_slide(prs,
         "사람 의존과 안주 — L2→L1 편입 구조가 방지한다",
         "Month 7~", RGBColor(0x33, 0x99, 0x33), risks,
-        "사람 의존과 안주 — Layer 2의 성과를 Layer 1에 편입하는 구조가 방지한다")
+        "사람 의존과 안주 — Layer 2의 성과를 Layer 1에 편입하는 구조로 방지")
 
 
 # ══════════════════════════════════════════════════
@@ -1985,7 +1985,7 @@ def slide_31_decision(prs):
         "Layer 1은 2개월 안에 결과를 보여준다 — Layer 2는 제도로 조직이 스스로 움직이게 한다",
         font_size=12, bold=True, color=C_TEXT_WHITE)
 
-    add_insight_line(slide, "오늘 승인하시면, 내일부터 실행합니다")
+    add_insight_line(slide, "오늘 승인 시, 내일부터 실행")
 
 
 def slide_32_closing(prs):
