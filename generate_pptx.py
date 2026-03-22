@@ -976,46 +976,70 @@ def slide_09_synergy(prs):
     set_slide_bg(slide, C_WHITE_BG)
     add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능")
 
-    # ── 좌측: 사이클 다이어그램 (4노드 순환) ──
-    # 모든 노드가 MARGIN_LEFT(0.70") 이상에 위치하도록 배치
-    cycle_cx = Inches(3.00)  # 사이클 중심 x (우측으로 이동)
-    cycle_cy = Inches(3.05)  # 사이클 중심 y
-    node_w = Inches(1.60)    # 폭 축소
-    node_h = Inches(0.45)
-    rx = Inches(1.20)  # 가로 반경
-    ry = Inches(0.75)  # 세로 반경
+    # ── 좌측: 사이클 다이어그램 (4노드 직사각형 배치) ──
+    # 명확한 좌표: 상/하 노드는 중앙 정렬, 좌/우 노드는 양옆
+    # 화살표는 노드 사이 정확한 중간 위치
 
-    cycle_nodes = [
-        ("L1: 전사 구조 구축", C_DARK_BG, C_TEXT_WHITE),    # 상
-        ("부서별 AI 활용", C_BOX_BG, C_TEXT_BLACK),          # 우
-        ("L2: 부서 성과 발생", C_BOX_BG, C_TEXT_BLACK),      # 하
-        ("성과 → L1 편입", C_DARK_BG, C_TEXT_WHITE),         # 좌
-    ]
-    # 위치 계산 — 좌측 노드가 MARGIN_LEFT 이상이 되도록
-    positions = [
-        (cycle_cx - node_w / 2, cycle_cy - ry - node_h / 2),              # 상 (중앙)
-        (cycle_cx + rx, cycle_cy - node_h / 2),                            # 우
-        (cycle_cx - node_w / 2, cycle_cy + ry - node_h / 2),              # 하 (중앙)
-        (cycle_cx - rx - node_w, cycle_cy - node_h / 2),                   # 좌
-    ]
-    # 좌측 노드 최소 x 보정
-    left_node_x = max(MARGIN_LEFT, positions[3][0])
-    positions[3] = (left_node_x, positions[3][1])
+    node_w = Inches(1.60)
+    node_h = Inches(0.42)
+    arrow_size = Inches(0.30)
+    gap_h = Inches(0.30)  # 상-좌/우 간 세로 간격
+    gap_w = Inches(0.30)  # 좌-상/하 간 가로 간격
 
-    for j, ((text, fill, tc), (nx, ny)) in enumerate(zip(cycle_nodes, positions)):
+    # 기준점: 좌측 영역 중앙 (0.70"~5.50" 사이)
+    area_cx = Inches(3.10)  # 좌측 영역 중앙 x
+    area_cy = Inches(3.05)  # 콘텐츠 영역 중앙 y
+
+    # 4노드 좌표 계산
+    top_x = area_cx - node_w / 2
+    top_y = area_cy - node_h - gap_h - arrow_size / 2
+
+    bot_x = area_cx - node_w / 2
+    bot_y = area_cy + gap_h + arrow_size / 2
+
+    left_x = area_cx - node_w - gap_w - arrow_size / 2
+    left_x = max(MARGIN_LEFT, left_x)  # 마진 보정
+    left_y = area_cy - node_h / 2
+
+    right_x = area_cx + gap_w + arrow_size / 2
+    right_y = area_cy - node_h / 2
+
+    nodes = [
+        (top_x, top_y, "L1: 전사 구조 구축", C_DARK_BG, C_TEXT_WHITE),
+        (right_x, right_y, "부서별 AI 활용", C_BOX_BG, C_TEXT_BLACK),
+        (bot_x, bot_y, "L2: 부서 성과 발생", C_BOX_BG, C_TEXT_BLACK),
+        (left_x, left_y, "성과 → L1 편입", C_DARK_BG, C_TEXT_WHITE),
+    ]
+
+    for nx, ny, text, fill, tc in nodes:
         box = add_rect(slide, nx, ny, node_w, node_h,
                        fill_color=fill, border_color=C_DARK_BG)
         add_text_to_shape(box, text, font_size=10, bold=True, color=tc)
 
-    # 시계방향 화살표
-    add_textbox(slide, cycle_cx + Inches(0.55), cycle_cy - Inches(0.50), Inches(0.30), Inches(0.30),
-                text="→", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx + Inches(0.55), cycle_cy + Inches(0.20), Inches(0.30), Inches(0.30),
-                text="↓", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx - Inches(0.85), cycle_cy + Inches(0.20), Inches(0.30), Inches(0.30),
-                text="←", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
-    add_textbox(slide, cycle_cx - Inches(0.85), cycle_cy - Inches(0.50), Inches(0.30), Inches(0.30),
-                text="↑", font_size=14, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+    # 시계방향 화살표 — 노드 사이 정확한 중간
+    # 상→우: 상 노드 우하단과 우 노드 좌상단 사이
+    ar_tr_x = top_x + node_w + (right_x - top_x - node_w) / 2 - arrow_size / 2
+    ar_tr_y = top_y + node_h + (right_y - top_y - node_h) / 2 - arrow_size / 2
+    add_textbox(slide, ar_tr_x, ar_tr_y, arrow_size, arrow_size,
+                text="↘", font_size=16, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+
+    # 우→하: 우 노드 좌하단과 하 노드 우상단 사이
+    ar_rb_x = right_x + (bot_x + node_w - right_x - node_w) / 2
+    ar_rb_y = right_y + node_h + (bot_y - right_y - node_h) / 2 - arrow_size / 2
+    add_textbox(slide, ar_rb_x, ar_rb_y, arrow_size, arrow_size,
+                text="↙", font_size=16, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+
+    # 하→좌: 하 노드 좌상단과 좌 노드 우하단 사이
+    ar_bl_x = left_x + node_w + (bot_x - left_x - node_w) / 2 - arrow_size / 2
+    ar_bl_y = left_y + node_h + (bot_y - left_y - node_h) / 2 - arrow_size / 2
+    add_textbox(slide, ar_bl_x, ar_bl_y, arrow_size, arrow_size,
+                text="↖", font_size=16, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
+
+    # 좌→상: 좌 노드 우상단과 상 노드 좌하단 사이
+    ar_lt_x = left_x + node_w + (top_x - left_x - node_w) / 2 - arrow_size / 2
+    ar_lt_y = top_y + node_h + (left_y - top_y - node_h) / 2 - arrow_size / 2
+    add_textbox(slide, ar_lt_x, ar_lt_y, arrow_size, arrow_size,
+                text="↗", font_size=16, bold=True, color=C_TEXT_BLACK, align=PP_ALIGN.CENTER)
 
     # ── 우측: 핵심 설명 3건 ──
     rx = Inches(5.80)
