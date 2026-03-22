@@ -1593,7 +1593,7 @@ def slide_23_policy4(prs):
     """슬라이드 23: 제도 4 — AI 챔피언 제도 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "챔피언이 부서의 변화를 이끌고, Layer 1과의 연결점")
+    add_white_title(slide, "챔피언은 부서의 변화를 이끄는 동시에, Layer 1과의 연결점이 된다")
 
     # 중앙 허브
     hub = add_rect(slide, Inches(4.00), Inches(2.20), Inches(2.00), Inches(0.60),
