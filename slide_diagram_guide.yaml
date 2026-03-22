@@ -73,7 +73,7 @@ design:
       bg: "#FFFFFF"
       title_position: 'y: 0.4", h: 1.1"'
       title_style: "22pt Bold, #1A1A1A"
-      body_start_y: '1.6~1.8"'
+      body_start_y: '1.65"'
       margin_left: '0.7"'
       content_width: '8.6"'
     inverted:
@@ -87,12 +87,123 @@ design:
       bg: "#FFFFFF"
       content: "제목만 표시 (예: 'Case 1 : 예시'). 본문 없음."
 
+  # ── 공간 배치 시스템 ──────────────────────────
+  spacing_system:
+
+    # ─ 슬라이드 존(Zone) 그리드 ─
+    # 모든 화이트 슬라이드는 이 3개 존으로 구성된다.
+    # Y좌표는 고정값이며, 범위 대신 이 값을 사용한다.
+    zones:
+      title:
+        y: '0.40"'
+        height: '1.10"'
+        description: "Action Title 영역. 모든 화이트 슬라이드에서 동일 위치."
+      content:
+        y: '1.65"'
+        max_bottom: '4.45"'
+        max_height: '2.80"'
+        description: "도식·본문 영역. 콘텐츠 종류에 따라 높이가 달라지나 시작 Y는 고정."
+      summary:
+        y: '4.35"'
+        height: '0.40"'
+        description: "하단 요약 박스 (선택). 인사이트 라인 위에 배경 박스로 핵심 메시지 강조."
+        when: "콘텐츠 영역 아래에 1줄 요약이 필요한 경우에만 사용"
+      insight:
+        y: '4.85"'
+        height: '0.35"'
+        description: "=> 인사이트 라인. 모든 화이트 슬라이드에서 동일 위치."
+
+    # ─ 간격 스케일 ─
+    # 요소 간 거리에는 반드시 이 스케일의 값만 사용한다.
+    # 임의의 값(예: 0.13", 0.27")은 사용 금지.
+    scale:
+      xxs: { value: '0.04"', use: "같은 그룹 내 밀착 요소 (라벨↔구분선, 넘버링↔텍스트)" }
+      xs:  { value: '0.08"', use: "카드 내부 상단 패딩 (카드 테두리 → 첫 텍스트)" }
+      sm:  { value: '0.10"', use: "카드 간 간격 (4개 이상 배치), 구분선 위아래 여백, 카드 내부 좌우 패딩" }
+      md:  { value: '0.15"', use: "카드 간 간격 (3개 배치), 카드 내부 좌우 패딩 (넓은 카드)" }
+      lg:  { value: '0.20"', use: "카드 간 간격 (2개 배치), 섹션 간 최소 여백, 흐름도 행 간격" }
+      xl:  { value: '0.30"', use: "카드 제목 → 본문 간격, 큰 섹션 간 분리" }
+      xxl: { value: '0.46"', use: "존(zone) 간 전환 간격 (제목 존 → 콘텐츠 존 등)" }
+
+    # ─ 등분 배치 공식 ─
+    # N개의 동일 크기 요소를 가로로 배치할 때 사용한다.
+    # content_width(8.60")를 기준으로 자동 계산한다.
+    equal_distribution:
+      formula: "card_width = (content_width - (N - 1) × gap) / N"
+      content_width: '8.60"'
+      start_x: '0.70"'
+      presets:
+        2: { card_width: '4.20"', gap: '0.20"', note: "2분할. 좌우 균등." }
+        3: { card_width: '2.73"', gap: '0.20"', note: "3분할. 표준 카드 배치." }
+        4: { card_width: '2.05"', gap: '0.10"', note: "4분할. 사례 비교 등." }
+        5: { card_width: '1.62"', gap: '0.10"', note: "5분할. 최소 카드 폭. 5개 초과 시 슬라이드 분리." }
+      max_items: 5
+      forbidden: "6개 이상의 가로 등분 배치. 5개 초과 시 반드시 슬라이드를 분리하거나 2행으로 전환."
+
+    # ─ 카드 내부 레이아웃 ─
+    # 배경 박스(카드) 안에 텍스트를 배치할 때의 규칙이다.
+    card_internal:
+      padding:
+        top: '0.08"'
+        bottom: '0.10"'
+        left: '0.10"'
+        right: '0.10"'
+        note: "넓은 카드(폭 3.5\" 이상)는 좌우 패딩을 0.15\"로 확대 가능"
+      spacing:
+        label_to_title: '0.05"'
+        title_to_body: '0.25"'
+        body_line_gap: '0.02"'
+        separator_margin: '0.07"'
+        description: |
+          - label_to_title: 유형 라벨(예: "유형 1") → 카드 제목 사이
+          - title_to_body: 카드 제목 → 본문 텍스트 사이
+          - body_line_gap: 본문 텍스트 줄 간격 (line spacing과 별도)
+          - separator_margin: 구분선(0.5pt) 위아래 여백
+      text_overflow:
+        strategy: "폰트 축소 우선"
+        rules: |
+          1. 텍스트가 카드 영역을 초과하면: 폰트 크기를 1pt씩 축소 (최소 9pt까지)
+          2. 9pt에서도 초과하면: 텍스트를 줄여서 핵심 키워드만 남긴다
+          3. 카드 높이를 늘리는 것은 같은 행의 다른 카드와 높이가 달라지므로 금지
+        forbidden:
+          - "같은 행의 카드들이 서로 다른 높이를 갖는 배치"
+          - "9pt 미만의 텍스트"
+          - "텍스트가 카드 밖으로 넘치는 상태로 방치"
+
+    # ─ 흐름도 노드 규격 ─
+    flow_node:
+      height: '0.38"'
+      min_width: '0.80"'
+      max_width: '1.50"'
+      arrow_width: '0.30"'
+      arrow_style: "→ 텍스트, 14pt Bold"
+      gap_between_nodes: '0.00"'
+      description: |
+        노드와 화살표가 빈틈 없이 이어진다.
+        노드 폭은 내부 텍스트 길이에 따라 min~max 범위에서 조정.
+        같은 흐름도 내 모든 노드는 동일한 높이(0.38")를 사용한다.
+
+    # ─ 다크 슬라이드 존 그리드 ─
+    dark_zones:
+      main_text:
+        y: '1.40"'
+        height: '1.80"'
+        description: "핵심 메시지 텍스트. 좌측 정렬, 수직 중앙."
+      sub_text:
+        y: '3.40"'
+        height: '0.40"'
+        description: "부제목 또는 보조 설명."
+      meta:
+        y: '4.60"'
+        height: '0.35"'
+        description: "발표자, 날짜 등 메타 정보."
+
   # ── 콘텐츠 박스 ────────────────────────────
   content_box:
     default:
       bg: "#D9D9D9"
       border: "#1A1A1A 0.5pt"
-      padding: '0.25"'
+      padding: '0.10"'
       title: "13~15pt Bold"
       body: "11~13pt Regular"
       text_align:
@@ -111,8 +222,11 @@ design:
       text: "#FFFFFF"
       when: "3박스 배치에서 강조할 항목 1개에 한해 사용"
     layout:
-      two_box:   { width_each: '4.0"', gap: '0.2"',  start_y: '1.6~1.7"', height: '2.4~3.4"' }
-      three_box: { width_each: '2.7"', gap: '0.15"', start_y: '1.6~1.7"', height: '2.4~3.4"' }
+      note: "등분 배치는 design.spacing_system.equal_distribution 참조"
+      two_box:   { width_each: '4.20"', gap: '0.20"', start_y: '1.65"', height: '2.80"' }
+      three_box: { width_each: '2.73"', gap: '0.20"', start_y: '1.65"', height: '2.80"' }
+      four_box:  { width_each: '2.05"', gap: '0.10"', start_y: '1.65"', height: '2.80"' }
+      five_box:  { width_each: '1.62"', gap: '0.10"', start_y: '1.65"', height: '2.80"' }
 
   # ── 레이아웃 원칙 ──────────────────────────
   layout:
@@ -162,7 +276,7 @@ design:
     insight_line:
       prefix: "=>"
       weight: "Bold"
-      position: 'y: 4.7~5.2" (슬라이드 하단)'
+      position: 'y: 4.85" (슬라이드 하단, design.spacing_system.zones.insight 참조)'
       rule: "해당 슬라이드의 핵심 takeaway를 한 줄로. Action Title과 같은 메시지를 다른 표현으로 강화. 새 메시지 추가 금지."
 
   # ── 사용 금지 요소 ─────────────────────────
@@ -209,7 +323,7 @@ principles:
       - step: 7
         action: "하단 인사이트 작성"
         detail: |
-          `=>` 접두어 + Bold. 슬라이드 하단 y: 4.7~5.2".
+          `=>` 접두어 + Bold. 슬라이드 하단 y: 4.85".
           Action Title과 같은 메시지를 다른 표현으로 강화한다.
           인사이트가 제목과 모순되거나 새로운 메시지를 추가하면 금지.
 
@@ -528,6 +642,15 @@ global_validation:
     slide_type:
       - "슬라이드 배경 유형(dark/white/inverted)이 design.slide_types 기준에 맞는가?"
       - "같은 배경이 연속 3장 이상 사용되지 않았는가?"
+    spacing:
+      - "제목 존이 y: 0.40\", h: 1.10\"에 배치되었는가?"
+      - "콘텐츠 존이 y: 1.65\"에서 시작하는가?"
+      - "인사이트 라인이 y: 4.85\"에 배치되었는가?"
+      - "요소 간 간격이 design.spacing_system.scale의 값만 사용하는가? (임의 값 금지)"
+      - "같은 행의 카드들이 동일한 높이를 갖는가?"
+      - "가로 등분 배치 시 design.spacing_system.equal_distribution.presets의 값을 따르는가?"
+      - "카드 내부 패딩이 card_internal 규칙을 따르는가? (상: 0.08\", 좌우: 0.10\", 하: 0.10\")"
+      - "텍스트가 카드 영역을 초과하지 않는가? (초과 시 폰트 축소, 최소 9pt)"
     visual_structure:
       - "도식 요소 수가 7개 이하인가? (초과 시 그루핑 또는 슬라이드 분리)"
       - "도형 크기와 간격이 슬라이드 전반에 일관성 있게 유지되는가?"
@@ -554,5 +677,5 @@ global_validation:
       - "넘버링에 빨간색 사용 (검정 사용)"
       - "회색 텍스트를 일반 본문·레이블·설명에 사용 → 검정(#1A1A1A) 사용. 레퍼런스·주석·캡션에만 허용."
     insight_line:
-      - '하단 인사이트가 `=>` 접두어 + Bold로 y: 4.7~5.2"에 배치되었는가?'
+      - '하단 인사이트가 `=>` 접두어 + Bold로 y: 4.85"에 배치되었는가?'
       - "인사이트가 Action Title과 같은 메시지를 강화하는가? (새 메시지 추가 금지)"
