@@ -70,6 +70,33 @@ FLOW_NODE_H = Inches(0.38)
 FLOW_ARROW_W = Inches(0.30)
 
 
+# ── 텍스트 폭 추정 함수 ────────────────────────
+def estimate_text_width(text, font_size_pt, bold=False):
+    """텍스트가 차지할 예상 폭(인치)을 근사 계산.
+    한글: 글자당 약 font_size * 0.017"
+    영문/숫자: 글자당 약 font_size * 0.009"
+    Bold는 약 8% 추가"""
+    width = 0
+    for ch in text:
+        if ord(ch) > 0x2E80:  # CJK 문자
+            width += font_size_pt * 0.017
+        else:
+            width += font_size_pt * 0.009
+    if bold:
+        width *= 1.08
+    return width
+
+
+def fit_font_size(text, box_width_inches, max_font_size, bold=False, min_font_size=9):
+    """텍스트가 박스 폭에 들어가는 최대 폰트 크기를 반환.
+    max_font_size에서 시작해서 1pt씩 줄여가며 확인."""
+    for fs in range(max_font_size, min_font_size - 1, -1):
+        estimated = estimate_text_width(text, fs, bold)
+        if estimated <= box_width_inches:
+            return fs
+    return min_font_size
+
+
 # ── 헬퍼 함수 ──────────────────────────────────
 
 def set_slide_bg(slide, color):
@@ -83,17 +110,18 @@ def set_slide_bg(slide, color):
 def add_textbox(slide, left, top, width, height, text="",
                 font_size=14, bold=False, color=C_TEXT_BLACK,
                 font_name=FONT_FAMILY, align=PP_ALIGN.LEFT,
-                anchor=MSO_ANCHOR.TOP):
-    """텍스트 박스 추가"""
+                anchor=MSO_ANCHOR.TOP, auto_fit=True):
+    """텍스트 박스 추가 (자동 폰트 축소 지원)"""
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.word_wrap = True
     tf.auto_size = None
-    # anchor 설정은 text_frame에서
-    try:
-        tf.paragraphs[0].alignment = align
-    except:
-        pass
+
+    # 자동 폰트 축소: 텍스트가 박스 폭에 맞는지 확인
+    actual_fs = font_size
+    if auto_fit and text:
+        box_w = width / 914400  # EMU to inches
+        actual_fs = fit_font_size(text, box_w, font_size, bold)
 
     p = tf.paragraphs[0]
     p.text = text
@@ -101,7 +129,7 @@ def add_textbox(slide, left, top, width, height, text="",
     run = p.runs[0] if p.runs else p.add_run()
     if not p.runs:
         run.text = text
-    run.font.size = Pt(font_size)
+    run.font.size = Pt(actual_fs)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -129,21 +157,26 @@ def add_rect(slide, left, top, width, height,
 
 def add_text_to_shape(shape, text, font_size=12, bold=False,
                       color=C_TEXT_BLACK, font_name=FONT_FAMILY,
-                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP):
-    """도형 내부에 텍스트 설정"""
+                      align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.TOP,
+                      auto_fit=True):
+    """도형 내부에 텍스트 설정 (자동 폰트 축소 지원)"""
     tf = shape.text_frame
     tf.word_wrap = True
     tf.auto_size = None
-    # vertical anchor
-    try:
-        tf.paragraphs[0].alignment = align
-    except:
-        pass
+
+    # 자동 폰트 축소
+    actual_fs = font_size
+    if auto_fit and text:
+        box_w = shape.width / 914400  # EMU to inches
+        # 내부 패딩 고려 (좌우 합계 약 0.15")
+        usable_w = max(box_w - 0.15, 0.3)
+        actual_fs = fit_font_size(text, usable_w, font_size, bold)
+
     p = tf.paragraphs[0]
     p.text = text
     p.alignment = align
     run = p.runs[0]
-    run.font.size = Pt(font_size)
+    run.font.size = Pt(actual_fs)
     run.font.bold = bold
     run.font.color.rgb = color
     run.font.name = font_name
@@ -151,21 +184,29 @@ def add_text_to_shape(shape, text, font_size=12, bold=False,
 
 
 def add_multiline_textbox(slide, left, top, width, height, lines,
-                          anchor=MSO_ANCHOR.TOP):
-    """여러 줄 텍스트 박스 (각 줄에 font_size, bold, color 지정)
-    lines: list of dict {"text", "font_size", "bold", "color", "font_name", "align"}
-    """
+                          anchor=MSO_ANCHOR.TOP, auto_fit=True):
+    """여러 줄 텍스트 박스 (각 줄에 font_size, bold, color 지정, 자동 폰트 축소)"""
     txBox = slide.shapes.add_textbox(left, top, width, height)
     tf = txBox.text_frame
     tf.word_wrap = True
     tf.auto_size = None
+    box_w = width / 914400  # EMU to inches
 
     for i, line in enumerate(lines):
         if i == 0:
             p = tf.paragraphs[0]
         else:
             p = tf.add_paragraph()
-        p.text = line.get("text", "")
+
+        text = line.get("text", "")
+        fs = line.get("font_size", 14)
+        bold = line.get("bold", False)
+
+        # 자동 폰트 축소
+        if auto_fit and text:
+            fs = fit_font_size(text, box_w, fs, bold)
+
+        p.text = text
         p.alignment = line.get("align", PP_ALIGN.LEFT)
         p.space_after = Pt(0)
         p.space_before = Pt(0)
@@ -173,16 +214,20 @@ def add_multiline_textbox(slide, left, top, width, height, lines,
             run = p.runs[0]
         else:
             run = p.add_run()
-            run.text = line.get("text", "")
-        run.font.size = Pt(line.get("font_size", 14))
-        run.font.bold = line.get("bold", False)
+            run.text = text
+        run.font.size = Pt(fs)
+        run.font.bold = bold
         run.font.color.rgb = line.get("color", C_TEXT_BLACK)
         run.font.name = line.get("font_name", FONT_FAMILY)
     return txBox
 
 
 def add_insight_line(slide, text):
-    """하단 인사이트 라인 (=> 접두어 + 18pt Bold + 중앙 정렬)"""
+    """하단 인사이트 라인 (=> 접두어 + Bold + 중앙 정렬, 자동 폰트 축소)"""
+    full_text = f"=> {text}"
+    box_w = CONTENT_W / 914400  # 8.60"
+    actual_fs = fit_font_size(full_text, box_w, 18, bold=True, min_font_size=11)
+
     txBox = slide.shapes.add_textbox(
         MARGIN_LEFT, ZONE_INSIGHT_Y, CONTENT_W, ZONE_INSIGHT_H
     )
@@ -193,14 +238,14 @@ def add_insight_line(slide, text):
 
     run1 = p.add_run()
     run1.text = "=> "
-    run1.font.size = Pt(18)
+    run1.font.size = Pt(actual_fs)
     run1.font.bold = True
     run1.font.color.rgb = C_TEXT_BLACK
     run1.font.name = FONT_FAMILY
 
     run2 = p.add_run()
     run2.text = text
-    run2.font.size = Pt(18)
+    run2.font.size = Pt(actual_fs)
     run2.font.bold = True
     run2.font.color.rgb = C_TEXT_BLACK
     run2.font.name = FONT_FAMILY
@@ -604,7 +649,7 @@ def slide_06_current_state(prs):
         ("매출 정산", "~32h", 32),
         ("비용 정산", "~24h", 24),
         ("보고·집계", "수시간~수일", 16),
-        ("데이터 가공", "전 부서 공통", 12),
+        ("데이터 가공", "공통", 12),
     ]
 
     bar_y = Inches(2.00)
@@ -1139,7 +1184,7 @@ def slide_13_tech_approach(prs):
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.25),
                 text="Palantir Foundry 5계층 참조 모델", font_size=12, bold=True, color=C_TEXT_BLACK)
 
-    layers_5 = ["1. 데이터\n   수집", "2. 정제\n   가공", "3. 비즈니스\n   구조 매핑", "4. 대시보드", "5. AI\n   의사결정"]
+    layers_5 = ["1. 데이터\n수집", "2. 정제\n가공", "3. 비즈니스\n매핑", "4. 대시보드", "5. AI\n의사결정"]
     node_w = Inches(1.50)
     node_h = Inches(0.55)
     arrow_w = Inches(0.30)
@@ -1202,19 +1247,19 @@ def slide_14_candidate_map(prs):
         },
         {
             "label": "탈락 5개",
-            "width": Inches(5.50),
+            "width": Inches(7.00),
             "fill": C_BOX_BG,
             "items": [
-                ("변동비", "Revenue 선행"),
-                ("손익 보고", "매출+비용 선행"),
-                ("수강 현황", "운영 효율"),
-                ("B2B/B2G", "매출 증대"),
-                ("ERP 추출", "인프라"),
+                ("변동비", "선행 필요"),
+                ("손익 보고", "선행 필요"),
+                ("수강 현황", "운영"),
+                ("B2B/B2G", "매출"),
+                ("ERP", "인프라"),
             ],
         },
         {
             "label": "실질 후보 3개",
-            "width": Inches(3.60),
+            "width": Inches(5.00),
             "fill": C_DARK_BG,
             "items": ["A. 매출 정산", "C. 광고비 집계", "G. 인건비 정산"],
         },
@@ -1515,11 +1560,11 @@ def slide_19_why_policy(prs):
     add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질")
 
     obstacles = [
-        {"num": "①", "problem": "유인 없음", "desc": "AI를 써도 평가에 반영되지 않으면 익숙한 방식 유지",
+        {"num": "①", "problem": "유인 없음", "desc": "AI 활용이 평가에 미반영 → 변화 거부",
          "solution": "제도 1, 2, 3"},
         {"num": "②", "problem": "신뢰 부족", "desc": "외부 대상 산출물의 AI 품질 우려",
          "solution": "Layer 1 + 품질 기준"},
-        {"num": "③", "problem": "유지보수 공백", "desc": "초기 도입 후 담당자 없으면 기존 방식으로 회귀",
+        {"num": "③", "problem": "유지보수 공백", "desc": "담당자 부재 시 기존 방식으로 회귀",
          "solution": "제도 4 (AI 챔피언)"},
     ]
 
@@ -1859,10 +1904,10 @@ def slide_26_caio_role(prs):
                 text="조직 성장 경로", font_size=13, bold=True, color=C_TEXT_BLACK, font_name=FONT_FAMILY_BLACK)
 
     phases = [
-        ("Phase 1", "CAIO 1인이 L1 구축 + L2 제도 설계"),
-        ("Phase 2", "도메인 챔피언 합류 + AI 챔피언 확산"),
-        ("Phase 3", "내부 팀 구성 + L2→L1 편입 정례화"),
-        ("Phase 4", "AI 일상화. 인당 매출 3억 원"),
+        ("Phase 1", "CAIO 1인 — L1 구축 + L2 설계"),
+        ("Phase 2", "챔피언 합류 + AI 챔피언 확산"),
+        ("Phase 3", "내부 팀 + L2→L1 편입 정례화"),
+        ("Phase 4", "AI 일상화, 인당 매출 3억 원"),
     ]
     py = Inches(2.00)
     for label, desc in phases:
