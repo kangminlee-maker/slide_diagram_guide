@@ -340,10 +340,21 @@ def add_insight_line(slide, text):
     return txBox
 
 
-def add_white_title(slide, text):
-    """화이트 슬라이드 제목 (zones.title) — 20pt Bold, 줄바꿈 없이 한 줄"""
+def add_white_title(slide, text, chapter=None):
+    """화이트 슬라이드 제목 (zones.title) — 20pt Bold, 줄바꿈 없이 한 줄
+    chapter: 헤드라인 위에 작게 표시하는 챕터명 (10pt Bold)"""
+    if chapter:
+        add_textbox(slide, MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, Inches(0.22),
+                    text=chapter, font_size=10, bold=True,
+                    color=C_SUB_WHITE, font_name=FONT_FAMILY)
+        title_y = ZONE_TITLE_Y + Inches(0.22)
+        title_h = ZONE_TITLE_H - Inches(0.22)
+    else:
+        title_y = ZONE_TITLE_Y
+        title_h = ZONE_TITLE_H
+
     txBox = slide.shapes.add_textbox(
-        MARGIN_LEFT, ZONE_TITLE_Y, CONTENT_W, ZONE_TITLE_H
+        MARGIN_LEFT, title_y, CONTENT_W, title_h
     )
     tf = txBox.text_frame
     tf.word_wrap = True
@@ -414,7 +425,7 @@ def slide_02_global_cases(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환 중")
+    add_white_title(slide, "글로벌 선도 기업들은 AI로 비용 구조 자체를 전환 중", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     companies = [
         {"name": "Klarna",   "industry": "핀테크",   "metric": "-47%",    "detail": "5,527→2,907명", "result": "인당 매출 73%↑"},
@@ -503,7 +514,7 @@ def slide_03_new_normal(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "채용과 운영의 New Normal: 사람을 늘리지 않고 AI로 처리")
+    add_white_title(slide, "채용과 운영의 New Normal: 사람을 늘리지 않고 AI로 처리", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -612,7 +623,7 @@ def slide_04_agenda(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "오늘의 논의: AI 전환 전략의 구조, 실행, 의사결정")
+    add_white_title(slide, "오늘의 논의: AI 전환 전략의 구조, 실행, 의사결정", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     parts = [
         ("Part 1", "AI 시대, 비용 구조가 바뀌고 있다", "1~7"),
@@ -658,7 +669,7 @@ def slide_05_disruption(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "우리가 성장한 방식으로 추월 당할 수 있다는 위기감")
+    add_white_title(slide, "우리가 성장한 방식으로 추월 당할 수 있다는 위기감", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     # 중앙 타임라인
     line_y = Inches(2.75)
@@ -732,7 +743,7 @@ def slide_06_current_state(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "매출이 성장하면 인건비도 비례하여 증가하는 구조")
+    add_white_title(slide, "매출이 성장하면 인건비도 비례하여 증가하는 구조", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     # ── 좌측: 월간 반복 업무 시간 ──
     left_x = MARGIN_LEFT
@@ -826,7 +837,7 @@ def slide_07_before_after(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
 
-    add_white_title(slide, "AI 전환은 '성장 → 인력 추가' 고리를 끊는다")
+    add_white_title(slide, "AI 전환은 '성장 → 인력 추가' 고리를 끊는다", chapter="Part 1 — 비용 구조가 바뀌고 있다")
 
     # Before 라벨
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, Inches(0.80), Inches(0.25),
@@ -910,7 +921,7 @@ def slide_08_two_layers(prs):
     """슬라이드 8: AI 전환의 두 가지 Layer (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "전사 AI 전환은 Top-down과 Bottom-up, 두 가지 Layer로 진행")
+    add_white_title(slide, "전사 AI 전환은 Top-down과 Bottom-up, 두 가지 Layer로 진행", chapter="Part 2 — AI 전환 전략 프레임워크")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -974,7 +985,7 @@ def slide_09_synergy(prs):
     개선: 텍스트 나열 → 좌측 사이클 다이어그램 + 우측 핵심 설명 3건"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능")
+    add_white_title(slide, "Layer 2의 부서별 성과가 Layer 1에 편입될 때 지속 가능한 절감 가능", chapter="Part 2 — AI 전환 전략 프레임워크")
 
     # ── 좌측: 사이클 다이어그램 (4노드 직사각형 배치) ──
     # 명확한 좌표: 상/하 노드는 중앙 정렬, 좌/우 노드는 양옆
@@ -1084,7 +1095,7 @@ def slide_10_palantir(prs):
     """슬라이드 10: Layer 1 참고 사례 (화이트, 4열 카드)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 1의 데이터 구조화 + 자동화 방식은 글로벌 기업에서 검증")
+    add_white_title(slide, "Layer 1의 데이터 구조화 + 자동화 방식은 글로벌 기업에서 검증", chapter="Part 2 — AI 전환 전략 프레임워크")
 
     n = 4
     card_w = PRESETS[n]["w"]
@@ -1151,7 +1162,7 @@ def slide_11_l2_cases(prs):
     """슬라이드 11: Layer 2 참고 사례 (화이트, 4열 카드 + 하단 매핑)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 2의 핵심은 기술이 아니라 제도 — 이 기업들은 제도를 먼저 설계")
+    add_white_title(slide, "Layer 2의 핵심은 기술이 아니라 제도 — 이 기업들은 제도를 먼저 설계", chapter="Part 2 — AI 전환 전략 프레임워크")
 
     n = 4
     card_w = PRESETS[n]["w"]
@@ -1213,7 +1224,7 @@ def slide_12_roadmap_overview(prs):
     """슬라이드 12: 실행 로드맵 개요 (화이트, 3단계 타임라인)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 1은 2개월 안에 완성하고, Layer 2는 즉시 시작한다")
+    add_white_title(slide, "Layer 1은 2개월 안에 완성하고, Layer 2는 즉시 시작한다", chapter="Part 2 — AI 전환 전략 프레임워크")
 
     n = 3
     col_w = Inches(2.60)
@@ -1300,7 +1311,7 @@ def slide_13_tech_approach(prs):
     """슬라이드 13: Layer 1의 기술 접근 (화이트, 상하 2단 구조도)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "검증된 아키텍처 위에 빠르게 구축, 결과를 바로 확인")
+    add_white_title(slide, "검증된 아키텍처 위에 빠르게 구축, 결과를 바로 확인", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     # 상단: Palantir 5계층
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.25),
@@ -1356,7 +1367,7 @@ def slide_14_candidate_map(prs):
     개선: 3단 퍼널 (8개 전체 → 5개 탈락 → 3개 선정) + 선정 기준 4개"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "8개 후보 중 실질 후보 3개 선별")
+    add_white_title(slide, "8개 후보 중 실질 후보 3개 선별", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     # ── 퍼널 3단 ──
     funnel_x = MARGIN_LEFT
@@ -1441,7 +1452,7 @@ def slide_15_comparison(prs):
     """슬라이드 15: 후보 비교표 + CAIO 권고 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "가장 빠르고 확실한 성과가 기대되는 영역")
+    add_white_title(slide, "가장 빠르고 확실한 성과가 기대되는 영역", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     # 표 데이터
     headers = ["기준", "A. 매출 정산", "C. 광고비 집계", "G. 인건비 정산"]
@@ -1491,7 +1502,7 @@ def slide_16_revenue_problem(prs):
     개선: 좌측에 Big Number + 프로세스 흐름(가로), 우측에 6가지 상품유형 그리드"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "매출 정산을 선택할 경우, 이것이 해결해야 할 구체적인 문제")
+    add_white_title(slide, "매출 정산을 선택할 경우, 이것이 해결해야 할 구체적인 문제", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     # ── 상단: Big Number (전폭) ──
     big_box = add_rect(slide, MARGIN_LEFT, ZONE_CONTENT_Y, CONTENT_W, Inches(0.70),
@@ -1565,7 +1576,7 @@ def slide_17_execution_plan(prs):
     수정: 라벨+4열이 content_width(8.60") 내에 수용되도록 열 폭 조정"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "2개월 안에 3개 영역을 완성한다")
+    add_white_title(slide, "2개월 안에 3개 영역을 완성한다", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     # 레이아웃 계산: 라벨(0.90") + 4열 = content_width(8.60") 내
     label_w = Inches(0.90)
@@ -1617,7 +1628,7 @@ def slide_18_success_metrics(prs):
     """슬라이드 18: 성공 지표 + 실패 모드 방어선 (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "가장 큰 위험은 기술 실패가 아니라 결과에 대한 불신")
+    add_white_title(slide, "가장 큰 위험은 기술 실패가 아니라 결과에 대한 불신", chapter="Part 3 — Layer 1 첫 프로젝트와 실행")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -1679,7 +1690,7 @@ def slide_19_why_policy(prs):
     """슬라이드 19: 왜 제도가 필요한가 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질")
+    add_white_title(slide, "기술 도입이 아니라 제도 설계가 Layer 2의 본질", chapter="Part 4 — Layer 2 제도 설계")
 
     obstacles = [
         {"num": "①", "problem": "유인 없음", "desc": "AI 활용이 평가에 미반영 → 변화 거부",
@@ -1720,7 +1731,7 @@ def slide_20_policy1(prs):
     """슬라이드 20: 제도 1 — AI-First 채용 원칙 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값이 된다")
+    add_white_title(slide, "사람을 더 뽑는 것이 아니라, AI를 먼저 활용하는 것이 기본값이 된다", chapter="Part 4 — 진입 차단: AI-First 채용 원칙")
 
     # 의사결정 플로우
     flow_items = [
@@ -1769,7 +1780,7 @@ def slide_21_policy2(prs):
     """슬라이드 21: 제도 2 — 생산성 KPI 의무화 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "모든 조직장에게 동일한 생산성 목표를 부여한다")
+    add_white_title(slide, "모든 조직장에게 동일한 생산성 목표를 부여한다", chapter="Part 4 — 목표 부여: 인당 생산성 KPI")
 
     # 피라미드 3단
     levels = [
@@ -1806,7 +1817,7 @@ def slide_22_policy3(prs):
     """슬라이드 22: 제도 3 — 동일 직무 경쟁 평가제 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라와야 한다")
+    add_white_title(slide, "같은 일을 하는 팀 중 하나가 AI로 앞서면, 나머지는 따라와야 한다", chapter="Part 4 — 경쟁 유도: 동일 직무 경쟁 평가제")
 
     # VS 구조
     left_box = add_rect(slide, Inches(0.90), Inches(1.80), Inches(3.50), Inches(1.20),
@@ -1853,7 +1864,7 @@ def slide_23_policy4(prs):
     """슬라이드 23: 제도 4 — AI 챔피언 제도 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "챔피언은 부서의 변화를 이끄는 동시에, Layer 1과의 연결점이 된다")
+    add_white_title(slide, "챔피언은 부서의 변화를 이끄는 동시에, Layer 1과의 연결점이 된다", chapter="Part 4 — 지속 운영: AI 챔피언 제도")
 
     # 중앙 허브
     hub = add_rect(slide, Inches(4.00), Inches(2.20), Inches(2.00), Inches(0.60),
@@ -1895,7 +1906,7 @@ def slide_24_integrated_timeline(prs):
     """슬라이드 24: 통합 타임라인 (슬라이드 12와 유사하지만 더 상세)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 1은 2개월 안에 완성하고, Layer 2는 즉시 시작한다")
+    add_white_title(slide, "Layer 1은 2개월 안에 완성하고, Layer 2는 즉시 시작한다", chapter="Part 5 — 통합 로드맵과 기대 효과")
 
     # 4구간 타임라인
     periods = [
@@ -1944,7 +1955,7 @@ def slide_25_expected_effects(prs):
     """슬라이드 25: 기대 효과 (화이트, 2열 + 하단 배너)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "Layer 1의 시간 절약 + Layer 2의 채용 동결 = 실질적 인건비 절감")
+    add_white_title(slide, "Layer 1의 시간 절약 + Layer 2의 채용 동결 = 실질적 인건비 절감", chapter="Part 5 — 통합 로드맵과 기대 효과")
 
     n = 2
     card_w = PRESETS[n]["w"]
@@ -1998,7 +2009,7 @@ def slide_26_caio_role(prs):
     """슬라이드 26: CAIO 역할 체계 (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "CAIO가 구조를 설계하고, 조직이 스스로 성장하는 구조")
+    add_white_title(slide, "CAIO가 구조를 설계하고, 조직이 스스로 성장하는 구조", chapter="Part 5 — 통합 로드맵과 기대 효과")
 
     # 좌측: 역할
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, Inches(4.00), Inches(0.25),
@@ -2058,11 +2069,11 @@ def slide_26_caio_role(prs):
 # Part 6: 예상 리스크와 대응 설계 (슬라이드 27~29)
 # ══════════════════════════════════════════════════
 
-def _risk_table_slide(prs, title, period_label, period_color, risks, insight_text):
+def _risk_table_slide(prs, title, period_label, period_color, risks, insight_text, chapter="Part 6 — 예상 리스크와 대응"):
     """리스크 표 슬라이드 공통 함수"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, title)
+    add_white_title(slide, title, chapter=chapter)
 
     # 시간축 라벨
     add_textbox(slide, MARGIN_LEFT, ZONE_CONTENT_Y, Inches(1.50), Inches(0.25),
@@ -2192,7 +2203,7 @@ def slide_31_decision(prs):
     """슬라이드 31: 경영진 의사결정 요청 (화이트)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "이후 실행 플랜")
+    add_white_title(slide, "이후 실행 플랜", chapter="Part 7 — 의사결정 요청")
 
     n = 2
     card_w = PRESETS[n]["w"]
