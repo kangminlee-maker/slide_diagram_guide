@@ -55,7 +55,7 @@ design:
     box_title:         { font: "Noto Sans KR Black", size: "13~15pt", weight: "Bold" }
     box_body:          { font: "Noto Sans KR",       size: "11~13pt", weight: "Regular" }
     caption:           { font: "Noto Sans KR",       size: "9~10pt",  weight: "Regular", style: "Italic, 회색(#808080)" }
-    insight_line:      { font: "Noto Sans KR",       size: "11pt",    weight: "Bold",    prefix: "=>" }
+    insight_line:      { font: "Noto Sans KR",       size: "18pt",    weight: "Bold",    prefix: "=>", align: "중앙 정렬" }
 
   # ── 슬라이드 유형 ──────────────────────────
   slide_types:
@@ -279,6 +279,8 @@ design:
     insight_line:
       prefix: "=>"
       weight: "Bold"
+      size: "18pt"
+      align: "중앙 정렬 (좌우 가운데)"
       position: 'y: 4.85" (슬라이드 하단, design.spacing_system.zones.insight 참조)'
       rule: "해당 슬라이드의 핵심 takeaway를 한 줄로. Action Title과 같은 메시지를 다른 표현으로 강화. 새 메시지 추가 금지."
 
@@ -326,7 +328,7 @@ principles:
       - step: 7
         action: "하단 인사이트 작성"
         detail: |
-          `=>` 접두어 + Bold. 슬라이드 하단 y: 4.85".
+          `=>` 접두어 + 18pt Bold + 중앙 정렬. 슬라이드 하단 y: 4.85".
           Action Title과 같은 메시지를 다른 표현으로 강화한다.
           인사이트가 제목과 모순되거나 새로운 메시지를 추가하면 금지.
 
@@ -680,5 +682,5 @@ global_validation:
       - "넘버링에 빨간색 사용 (검정 사용)"
       - "회색 텍스트를 일반 본문·레이블·설명에 사용 → 검정(#1A1A1A) 사용. 레퍼런스·주석·캡션에만 허용."
     insight_line:
-      - '하단 인사이트가 `=>` 접두어 + Bold로 y: 4.85"에 배치되었는가?'
+      - '하단 인사이트가 `=>` 접두어 + 18pt Bold + 중앙 정렬로 y: 4.85"에 배치되었는가?'
       - "인사이트가 Action Title과 같은 메시지를 강화하는가? (새 메시지 추가 금지)"
