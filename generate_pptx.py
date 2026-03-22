@@ -747,7 +747,7 @@ def slide_08_two_layers(prs):
     """슬라이드 8: AI 전환의 두 가지 Layer (화이트, 2분할)"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, C_WHITE_BG)
-    add_white_title(slide, "전사 AI 전환은 성격이 다른 두 Layer로 구성")
+    add_white_title(slide, "전사 AI 전환은 Top-down과 Bottom-up, 두 가지 Layer로 진행")
 
     n = 2
     card_w = PRESETS[n]["w"]
